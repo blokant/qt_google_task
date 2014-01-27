@@ -2,7 +2,7 @@
 #define DIALOG_H
 
 #include <QDialog>
-
+#include "oauth2.h"
 namespace Ui {
 class Dialog;
 }
@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::Dialog *ui;
+public slots:
+    void slotLoginDone();
 };
 
 #endif // DIALOG_H

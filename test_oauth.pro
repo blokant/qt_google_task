@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui webkit
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,8 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        dialog.cpp
+        dialog.cpp \
+    oauth2.cpp \
+    logindialog.cpp
 
-HEADERS  += dialog.h
+HEADERS  += dialog.h \
+    oauth2.h \
+    logindialog.h
 
 FORMS    += dialog.ui
