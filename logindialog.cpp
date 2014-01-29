@@ -19,10 +19,12 @@ LoginDialog::~LoginDialog()
 
 void LoginDialog::urlChanged(const QUrl &url)
 {
+    qDebug() << "void LoginDialog::urlChanged";
     qDebug() << "URL =" << url;
     QString str = url.toString();
     if(str.indexOf("access_token") != -1)
     {
+        qDebug() << "indexOf works";
         QStringList query = str.split("#");
         QStringList lst = query[1].split("&");
         for (int i=0; i<lst.count(); i++ )

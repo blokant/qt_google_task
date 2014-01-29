@@ -8,7 +8,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->setupUi(this);
     OAuth2 *m_pOAuth2 = new OAuth2(this);
     connect(m_pOAuth2, SIGNAL(loginDone()), this, SLOT(slotLoginDone()));
-    m_pOAuth2->startLogin(true);
+    m_pOAuth2->startLogin(false);
 
 }
 

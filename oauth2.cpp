@@ -9,13 +9,13 @@ OAuth2::OAuth2(QWidget* parent)
 {
     m_strEndPoint = "https://accounts.google.com/o/oauth2/auth";
     m_strScope = "https://www.googleapis.com/auth/tasks";
-    m_strClientID = "773994449559.apps.googleusercontent.com";
-    m_strRedirectURI = "http://localhost";
+    m_strClientID = "773994449559-57kdeaogcku39qk3ceqqbebm6fsudc5u.apps.googleusercontent.com";
+    m_strRedirectURI = "urn:ietf:wg:oauth:2.0:oob";
+   // m_strRedirectURI = "http://localhost";
     m_strResponseType = "code";
-
-    m_strCompanyName = "Gtasks_manager"; //You company here
+    m_strCompanyName = "GTasksManager"; //You company here
     m_strAppName = "test_app_name"; //Your application name here
-
+ //   m_strAccessToken = "4/WgdNZqmRFLVhYtNbsXtKZM6Aldov.sqxe2xtFBdIfPvB8fYmgkJzT2ka0hwI";
     m_pLoginDialog = new LoginDialog(parent);
     m_pParent = parent;
     connect(m_pLoginDialog, SIGNAL(accessTokenObtained()), this, SLOT(accessTokenObtained()));
@@ -50,6 +50,7 @@ void OAuth2::setAppName(const QString& appName)
 
 QString OAuth2::loginUrl()
 {
+    qDebug() <<"QString OAuth2::loginUrl()";
     QString str = QString("%1?client_id=%2&redirect_uri=%3&response_type=%4&scope=%5").arg(m_strEndPoint).arg(m_strClientID).
             arg(m_strRedirectURI).arg(m_strResponseType).arg(m_strScope);
     qDebug() << "Login URL" << str;
@@ -83,6 +84,7 @@ void OAuth2::startLogin(bool bForce)
 
     if(str.isEmpty() || bForce)
     {
+        qDebug() << "bad if";
         m_pLoginDialog->setLoginUrl(loginUrl());
         m_pLoginDialog->show();
     }
