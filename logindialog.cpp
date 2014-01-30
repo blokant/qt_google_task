@@ -67,7 +67,7 @@ bool LoginDialog::loadPageFinished()
     {
         long indexOfCode = pageSource.indexOf("input id=\"code\"");
         long indexOfValueElement = pageSource.indexOf("value=", indexOfCode);
-        long indexOfTerminatingQuot = pageSource.indexOf("\"" , indexOfValueElement + 7);
+        long indexOfTerminatingQuot = pageSource.indexOf("\"" , indexOfValueElement + 8);
         m_strAccessCode = pageSource.mid(indexOfValueElement + 7, indexOfTerminatingQuot - (indexOfValueElement + 7) );
         emit accessCodeObtained();
     }

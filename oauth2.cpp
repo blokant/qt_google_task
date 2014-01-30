@@ -8,6 +8,7 @@
 OAuth2::OAuth2(QWidget* parent)
 {
     m_strEndPoint = "https://accounts.google.com/o/oauth2/auth";
+    m_strToken = "https://accounts.google.com/o/oauth2/token";
     m_strScope = "https://www.googleapis.com/auth/tasks";
     m_strClientID = "773994449559-57kdeaogcku39qk3ceqqbebm6fsudc5u.apps.googleusercontent.com";
     m_strRedirectURI = "urn:ietf:wg:oauth:2.0:oob";
@@ -55,6 +56,14 @@ QString OAuth2::loginUrl()
     QString str = QString("%1?client_id=%2&redirect_uri=%3&response_type=%4&scope=%5").arg(m_strEndPoint).arg(m_strClientID).
             arg(m_strRedirectURI).arg(m_strResponseType).arg(m_strScope);
     qDebug() << "Login URL" << str;
+    return str;
+}
+
+QString OAuth2::tokenUrl()
+{
+    QString str = QString("%1?code=%2&redirect_uri=%3&client_id=%4&scope=%5").arg(m_strToken).arg(m_pLoginDialog->accessCode()).
+            arg(m_strRedirectURI).arg(m_strClientID).arg(m_strScope);
+    //qDebug() << "Login URL" << str;
     return str;
 }
 
@@ -108,6 +117,7 @@ void OAuth2::accessTokenObtained()
 void OAuth2::slotAccessCodeObtained()
 {
     qDebug() << "code obtained and it's : " << m_pLoginDialog->accessCode();
+    qDebug() << "token String: " << tokenUrl();
 }
 
 

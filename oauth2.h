@@ -24,6 +24,7 @@ public:
     void setAppName(const QString& appName);
 
     QString loginUrl();
+    QString tokenUrl();
 
 signals:
     //Signal that is emitted when login is ended OK.
@@ -35,7 +36,7 @@ private slots:
 
 private:
     QString m_strAccessToken;
-
+    QString m_strToken;
     QString m_strEndPoint;
     QString m_strScope;
     QString m_strClientID;
