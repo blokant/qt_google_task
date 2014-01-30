@@ -22,6 +22,7 @@ public:
 
 signals:
     void accessTokenObtained();
+    void accessCodeObtained();
 
 private slots:
     void urlChanged(const QUrl& url);

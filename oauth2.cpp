@@ -19,6 +19,7 @@ OAuth2::OAuth2(QWidget* parent)
     m_pLoginDialog = new LoginDialog(parent);
     m_pParent = parent;
     connect(m_pLoginDialog, SIGNAL(accessTokenObtained()), this, SLOT(accessTokenObtained()));
+    connect(m_pLoginDialog, SIGNAL(accessCodeObtained()) , this, SLOT(slotAccessCodeObtained()) );
 }
 
 void OAuth2::setScope(const QString& scope)
@@ -102,6 +103,11 @@ void OAuth2::accessTokenObtained()
     settings.setValue("access_token", m_strAccessToken);
     emit loginDone();
 
+}
+
+void OAuth2::slotAccessCodeObtained()
+{
+    qDebug() << "code obtained and it's : " << m_pLoginDialog->accessCode();
 }
 
 

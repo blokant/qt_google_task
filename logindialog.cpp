@@ -49,6 +49,10 @@ QString LoginDialog::accessToken()
     return m_strAccessToken;
 }
 
+QString LoginDialog::accessCode()
+{
+    return m_strAccessCode;
+}
 
 void LoginDialog::setLoginUrl(const QString& url)
 {
@@ -61,15 +65,11 @@ bool LoginDialog::loadPageFinished()
     //qDebug() << "PageSource: " << pageSource;
     if(pageSource.contains(("Please copy this code")))
     {
-       // qDebug() << "wow. here is the code: ";// << pageSource.at(pageSource.indexOf("4"));
         long indexOfCode = pageSource.indexOf("input id=\"code\"");
-       // qDebug() << "index: " << indexOfCode;
         long indexOfValueElement = pageSource.indexOf("value=", indexOfCode);
         long indexOfTerminatingQuot = pageSource.indexOf("\"" , indexOfValueElement + 7);
         m_strAccessCode = pageSource.mid(indexOfValueElement + 7, indexOfTerminatingQuot - (indexOfValueElement + 7) );
-      //  qDebug() << "len : "<< indexOfCode - pageSource.indexOf(">",indexOfCode);
-        //for(int i = indexOfCode; i < indexOfCode + 20; i++)
-        //    qDebug() << pageSource.at(i);
+        emit accessCodeObtained();
     }
     return true;
 }

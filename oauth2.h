@@ -31,6 +31,7 @@ signals:
 
 private slots:
     void accessTokenObtained();
+    void slotAccessCodeObtained();
 
 private:
     QString m_strAccessToken;
