@@ -40,6 +40,10 @@ void LoginDialog::urlChanged(const QUrl &url)
             }
         }
     }
+    if(str.indexOf("code=") != -1)
+    {
+        qDebug() << "looks like code added";
+    }
 
 
 }

@@ -61,8 +61,8 @@ QString OAuth2::loginUrl()
 
 QString OAuth2::tokenUrl()
 {
-    QString str = QString("%1?code=%2&redirect_uri=%3&client_id=%4&scope=%5").arg(m_strToken).arg(m_pLoginDialog->accessCode()).
-            arg(m_strRedirectURI).arg(m_strClientID).arg(m_strScope);
+    QString str = QString("%1?code=%2&redirect_uri=%3&client_id=%4&scope=%5&grant_type=").arg(m_strToken).arg(m_pLoginDialog->accessCode()).
+            arg(m_strRedirectURI).arg(m_strClientID).arg(m_strScope).arg("authorization_code");
     //qDebug() << "Login URL" << str;
     return str;
 }
@@ -118,6 +118,8 @@ void OAuth2::slotAccessCodeObtained()
 {
     qDebug() << "code obtained and it's : " << m_pLoginDialog->accessCode();
     qDebug() << "token String: " << tokenUrl();
+    m_pLoginDialog->setLoginUrl(tokenUrl());
+    m_pLoginDialog->show();
 }
 
 
