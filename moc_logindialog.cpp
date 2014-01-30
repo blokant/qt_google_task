@@ -22,7 +22,7 @@ static const uint qt_meta_data_LoginDialog[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -34,13 +34,14 @@ static const uint qt_meta_data_LoginDialog[] = {
 
  // slots: signature, parameters, type, tag, flags
       39,   35,   12,   12, 0x08,
+      61,   12,   56,   12, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_LoginDialog[] = {
     "LoginDialog\0\0accessTokenObtained()\0"
-    "url\0urlChanged(QUrl)\0"
+    "url\0urlChanged(QUrl)\0bool\0loadPageFinished()\0"
 };
 
 void LoginDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -51,6 +52,8 @@ void LoginDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         switch (_id) {
         case 0: _t->accessTokenObtained(); break;
         case 1: _t->urlChanged((*reinterpret_cast< const QUrl(*)>(_a[1]))); break;
+        case 2: { bool _r = _t->loadPageFinished();
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
         default: ;
         }
     }
@@ -88,9 +91,9 @@ int LoginDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }
