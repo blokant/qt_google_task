@@ -5,6 +5,7 @@
 #include <QString>
 #include <QUrl>
 
+
 namespace Ui {
     class LoginDialog;
 }
@@ -19,6 +20,7 @@ public:
     void setLoginUrl(const QString& url);
     QString accessToken();
     QString accessCode();
+    void setTokenAddress(QString);
 
 signals:
     void accessTokenObtained();
@@ -27,11 +29,13 @@ signals:
 private slots:
     void urlChanged(const QUrl& url);
     bool loadPageFinished();
+    void requestToken();
 
 private:
     Ui::LoginDialog *ui;
     QString m_strAccessToken;
     QString m_strAccessCode;
+    QString m_strTokenAddress;
 };
 
 #endif // LOGINDIALOG_H

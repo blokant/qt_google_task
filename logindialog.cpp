@@ -13,6 +13,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->webView, SIGNAL(urlChanged(QUrl)), this, SLOT(urlChanged(QUrl)));
     connect(ui->webView, SIGNAL(loadFinished(bool)) , this, SLOT(loadPageFinished()) );
+    m_strTokenAddress = "";
 }
 
 LoginDialog::~LoginDialog()
@@ -76,4 +77,14 @@ bool LoginDialog::loadPageFinished()
         emit accessCodeObtained();
     }
     return true;
+}
+void LoginDialog::requestToken()
+{
+
+    //return reply;
+}
+
+void LoginDialog::setTokenAddress(QString str)
+{
+    m_strTokenAddress = str;
 }

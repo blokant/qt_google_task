@@ -3,6 +3,10 @@
 
 #include <QString>
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QByteArray>
 
 class LoginDialog;
 
@@ -33,10 +37,14 @@ signals:
 private slots:
     void accessTokenObtained();
     void slotAccessCodeObtained();
+    void getAccessToken();
 
 private:
     QString m_strAccessToken;
-    QString m_strToken;
+    QString m_strAccessCode;
+    QString m_strGrantType;
+    QString m_strTokenAddress;
+    QString m_strClientSecret;
     QString m_strEndPoint;
     QString m_strScope;
     QString m_strClientID;
