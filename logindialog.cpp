@@ -23,8 +23,6 @@ LoginDialog::~LoginDialog()
 
 void LoginDialog::urlChanged(const QUrl &url)
 {
-    qDebug() << "void LoginDialog::urlChanged";
-    qDebug() << "URL =" << url;
     QString str = url.toString();
     if(str.indexOf("access_token") != -1)
     {
@@ -41,10 +39,7 @@ void LoginDialog::urlChanged(const QUrl &url)
             }
         }
     }
-    if(str.indexOf("code=") != -1)
-    {
-        qDebug() << "looks like code added";
-    }
+
 
 
 }
@@ -67,7 +62,6 @@ void LoginDialog::setLoginUrl(const QString& url)
 bool LoginDialog::loadPageFinished()
 {
     QString pageSource = ui->webView->page()->currentFrame()->toHtml();
-    //qDebug() << "PageSource: " << pageSource;
     if(pageSource.contains(("Please copy this code")))
     {
         long indexOfCode = pageSource.indexOf("input id=\"code\"");
@@ -81,7 +75,6 @@ bool LoginDialog::loadPageFinished()
 void LoginDialog::requestToken()
 {
 
-    //return reply;
 }
 
 void LoginDialog::setTokenAddress(QString str)

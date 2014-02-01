@@ -13,12 +13,10 @@ OAuth2::OAuth2(QWidget* parent)
     m_strClientID = "773994449559-57kdeaogcku39qk3ceqqbebm6fsudc5u.apps.googleusercontent.com";
     m_strRedirectURI = "urn:ietf:wg:oauth:2.0:oob";
     m_strClientSecret = "VDtJ21xZOPotTg7o7UJz3MbT";
-   // m_strRedirectURI = "http://localhost";
     m_strResponseType = "code";
     m_strGrantType = "authorization_code";
     m_strCompanyName = "GTasksManager"; //You company here
     m_strAppName = "test_app_name"; //Your application name here
- //   m_strAccessToken = "4/WgdNZqmRFLVhYtNbsXtKZM6Aldov.sqxe2xtFBdIfPvB8fYmgkJzT2ka0hwI";
     m_pLoginDialog = new LoginDialog(parent);
     m_pParent = parent;
     connect(m_pLoginDialog, SIGNAL(accessTokenObtained()), this, SLOT(accessTokenObtained()));
@@ -54,10 +52,8 @@ void OAuth2::setAppName(const QString& appName)
 
 QString OAuth2::loginUrl()
 {
-    qDebug() <<"QString OAuth2::loginUrl()";
     QString str = QString("%1?client_id=%2&redirect_uri=%3&response_type=%4&scope=%5").arg(m_strEndPoint).arg(m_strClientID).
             arg(m_strRedirectURI).arg(m_strResponseType).arg(m_strScope);
-    qDebug() << "Login URL" << str;
     return str;
 }
 
@@ -65,7 +61,6 @@ QString OAuth2::tokenUrl()
 {
     QString str = QString("%1?code=%2&redirect_uri=%3&client_id=%4&scope=%5&grant_type=%6&client_secret=%7").arg(m_strTokenAddress).arg(m_pLoginDialog->accessCode()).
             arg(m_strRedirectURI).arg(m_strClientID).arg(m_strScope).arg("authorization_code").arg(m_strClientSecret);
-    //qDebug() << "Login URL" << str;
     return str;
 }
 
@@ -83,8 +78,6 @@ void OAuth2::startLogin(bool bForce)
 {
     QSettings settings(m_strCompanyName, m_strAppName);
     QString str = settings.value("access_token", "").toString();
-
-    qDebug() << "OAuth2::startLogin, token from Settings" << str;
     if(m_strClientID == "YOUR_CLIENT_ID_HERE" || m_strRedirectURI == "YOUR_REDIRECT_URI_HERE")
     {
         QMessageBox::warning(m_pParent, "Warning",
@@ -93,10 +86,8 @@ void OAuth2::startLogin(bool bForce)
         return;
     }
 
-
     if(str.isEmpty() || bForce)
     {
-        qDebug() << "bad if";
         m_pLoginDialog->setLoginUrl(loginUrl());
         m_pLoginDialog->show();
     }
@@ -120,9 +111,10 @@ void OAuth2::slotAccessCodeObtained()
 {
     qDebug() << "code obtained and it's : " << m_pLoginDialog->accessCode();
     m_strAccessCode = m_pLoginDialog->accessCode();
-    qDebug() << "token String: " << tokenUrl();
+   // qDebug() << "token String: " << tokenUrl();
     m_pLoginDialog->setLoginUrl(tokenUrl());
     m_pLoginDialog->show();
+    getAccessToken();
 }
 
 void OAuth2::getAccessToken()
@@ -137,17 +129,21 @@ void OAuth2::getAccessToken()
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     QByteArray data;
     QUrl params;
-
-    params.addQueryItem("code",m_strAccessCode);
-    params.addQueryItem("redirect_uri",m_strRedirectURI);
-    params.addQueryItem("client_id",m_strClientID);
-    params.addQueryItem("scope",m_strScope);
     params.addQueryItem("grant_type",m_strGrantType);
+    params.addQueryItem("client_id",m_strClientID);
     params.addQueryItem("client_secret",m_strClientSecret);
-    data.append(params.toString());
-    data.remove(0,1);
+    params.addQueryItem("code",  m_strAccessCode );
+    params.addQueryItem("redirect_uri",m_strRedirectURI);
+    params.addQueryItem("scope",m_strScope);
+    data.append(params.encodedQuery());
+    //data.remove(0,1);
+    nwam->post(*request,data);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
+}
 
-    QNetworkReply *reply = nwam->post(*request,data);
+void OAuth2::slotProcessPostReply(QNetworkReply *r)
+{
+    qDebug() << "reply: " << r->readAll();
 }
 
 

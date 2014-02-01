@@ -38,6 +38,7 @@ private slots:
     void accessTokenObtained();
     void slotAccessCodeObtained();
     void getAccessToken();
+    void slotProcessPostReply(QNetworkReply*);
 
 private:
     QString m_strAccessToken;
