@@ -7,7 +7,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QByteArray>
-
+#include "qtjson/json.h"
 class LoginDialog;
 
 class OAuth2 : public QObject

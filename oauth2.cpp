@@ -5,6 +5,9 @@
 #include <QSettings>
 #include <QMessageBox>
 
+using QtJson::JsonObject;
+using QtJson::JsonArray;
+
 OAuth2::OAuth2(QWidget* parent)
 {
     m_strEndPoint = "https://accounts.google.com/o/oauth2/auth";
@@ -141,9 +144,18 @@ void OAuth2::getAccessToken()
     connect(nwam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
 }
 
-void OAuth2::slotProcessPostReply(QNetworkReply *r)
+void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 {
-    qDebug() << "reply: " << r->readAll();
+    QString json = r->readAll();
+    qDebug() << "reply: " << json;
+    bool ok;
+    JsonObject result = QtJson::parse(json, ok).toMap();
+    if (ok)
+    {
+        qDebug() << "token: " << result["access_token"].toString();
+    }
+
+
 }
 
 
