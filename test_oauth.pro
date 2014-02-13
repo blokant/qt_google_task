@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         dialog.cpp \
     oauth2.cpp \
-    logindialog.cpp
+    logindialog.cpp \
+    qtjson/json.cpp
 
 HEADERS  += dialog.h \
     oauth2.h \
-    logindialog.h
+    logindialog.h \
+    qtjson/json.h
 
 FORMS    += dialog.ui
