@@ -21,6 +21,7 @@ public:
     QString accessToken();
     QString accessCode();
     void setTokenAddress(QString);
+    void clearWebView();
 
 signals:
     void accessTokenObtained();
@@ -36,6 +37,7 @@ private:
     QString m_strAccessToken;
     QString m_strAccessCode;
     QString m_strTokenAddress;
+    QString m_StrRefereshToken;
 };
 
 #endif // LOGINDIALOG_H

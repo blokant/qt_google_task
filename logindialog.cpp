@@ -81,3 +81,8 @@ void LoginDialog::setTokenAddress(QString str)
 {
     m_strTokenAddress = str;
 }
+
+void LoginDialog::clearWebView()
+{
+    ui->webView->setContent("");
+}

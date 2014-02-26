@@ -22,7 +22,7 @@ OAuth2::OAuth2(QWidget* parent)
     m_strAppName = "test_app_name"; //Your application name here
     m_pLoginDialog = new LoginDialog(parent);
     m_pParent = parent;
-    connect(m_pLoginDialog, SIGNAL(accessTokenObtained()), this, SLOT(accessTokenObtained()));
+  //  connect(m_pLoginDialog, SIGNAL(accessTokenObtained()), this, SLOT(accessTokenObtained()));
     connect(m_pLoginDialog, SIGNAL(accessCodeObtained()) , this, SLOT(slotAccessCodeObtained()) );
 }
 
@@ -122,6 +122,7 @@ void OAuth2::slotAccessCodeObtained()
 
 void OAuth2::getAccessToken()
 {
+    m_pLoginDialog->clearWebView();
     if(m_strTokenAddress.isEmpty())
     {
         qDebug() << "token adress should be set by setTokenAdress()";
@@ -153,6 +154,11 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
     if (ok)
     {
         qDebug() << "token: " << result["access_token"].toString();
+        qDebug() << "refresh_toke: " << result["refresh_token"].toString();
+        m_strAccessToken = result["access_token"].toString();
+        m_strRefreshToken = result["refresh_token"].toString();
+        emit loginDone();
+        m_pLoginDialog->close();
     }
 
 

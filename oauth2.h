@@ -42,6 +42,7 @@ private slots:
 
 private:
     QString m_strAccessToken;
+    QString m_strRefreshToken;
     QString m_strAccessCode;
     QString m_strGrantType;
     QString m_strTokenAddress;
