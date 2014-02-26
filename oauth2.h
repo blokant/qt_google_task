@@ -7,6 +7,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QByteArray>
+#include <QSettings>
 #include "qtjson/json.h"
 class LoginDialog;
 

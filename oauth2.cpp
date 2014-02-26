@@ -147,6 +147,7 @@ void OAuth2::getAccessToken()
 
 void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 {
+    QSettings conf;
     QString json = r->readAll();
     qDebug() << "reply: " << json;
     bool ok;
@@ -157,6 +158,8 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
         qDebug() << "refresh_toke: " << result["refresh_token"].toString();
         m_strAccessToken = result["access_token"].toString();
         m_strRefreshToken = result["refresh_token"].toString();
+        conf.setValue("token",result["access_token"].toString());
+        conf.setValue("refresh_token", result["refresh_token"].toString());
         emit loginDone();
         m_pLoginDialog->close();
     }
