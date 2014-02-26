@@ -147,7 +147,7 @@ void OAuth2::getAccessToken()
 
 void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 {
-    QSettings conf;
+    QSettings conf("MegawarpSoftware", "taskman");
     QString json = r->readAll();
     qDebug() << "reply: " << json;
     bool ok;
