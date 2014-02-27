@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::Dialog *ui;
+    OAuth2 *m_pOAuth2;
 public slots:
     void slotLoginDone();
 };
