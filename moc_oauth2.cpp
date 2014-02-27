@@ -36,14 +36,14 @@ static const uint qt_meta_data_OAuth2[] = {
       20,    7,    7,    7, 0x08,
       42,    7,    7,    7, 0x08,
       67,    7,    7,    7, 0x08,
-      84,    7,    7,    7, 0x08,
+      87,    7,    7,    7, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_OAuth2[] = {
     "OAuth2\0\0loginDone()\0accessTokenObtained()\0"
-    "slotAccessCodeObtained()\0getAccessToken()\0"
+    "slotAccessCodeObtained()\0obtainAccessToken()\0"
     "slotProcessPostReply(QNetworkReply*)\0"
 };
 
@@ -56,7 +56,7 @@ void OAuth2::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 0: _t->loginDone(); break;
         case 1: _t->accessTokenObtained(); break;
         case 2: _t->slotAccessCodeObtained(); break;
-        case 3: _t->getAccessToken(); break;
+        case 3: _t->obtainAccessToken(); break;
         case 4: _t->slotProcessPostReply((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
         default: ;
         }

@@ -9,6 +9,7 @@ Dialog::Dialog(QWidget *parent) :
     OAuth2 *m_pOAuth2 = new OAuth2(this);
     connect(m_pOAuth2, SIGNAL(loginDone()), this, SLOT(slotLoginDone()));
     QSettings conf("MegawarpSoftware", "taskman");
+    //m_pOAuth2->getAccessToken();
     QString v = conf.value("refresh_token").toString();
     if(v.isEmpty())
         m_pOAuth2->startLogin(false);
@@ -24,5 +25,7 @@ Dialog::~Dialog()
 
 void Dialog::slotLoginDone()
 {
+    QSettings conf("MegawarpSoftware", "taskman");
     qDebug() << "slot login done";
+    qDebug() << conf.value("refresh_token").toString();
 }

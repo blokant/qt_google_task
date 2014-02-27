@@ -1,6 +1,6 @@
 #ifndef DIALOG_H
 #define DIALOG_H
-
+#include <QSettings>
 #include <QDialog>
 #include "oauth2.h"
 namespace Ui {

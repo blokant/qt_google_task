@@ -67,9 +67,14 @@ QString OAuth2::tokenUrl()
     return str;
 }
 
-QString OAuth2::accessToken()
+QString OAuth2::getAccessToken()
 {
     return m_strAccessToken;
+}
+
+QString OAuth2::getRefreshToken()
+{
+    return m_strRefreshToken;
 }
 
 bool OAuth2::isAuthorized()
@@ -117,10 +122,10 @@ void OAuth2::slotAccessCodeObtained()
    // qDebug() << "token String: " << tokenUrl();
     m_pLoginDialog->setLoginUrl(tokenUrl());
     m_pLoginDialog->show();
-    getAccessToken();
+    obtainAccessToken();
 }
 
-void OAuth2::getAccessToken()
+void OAuth2::obtainAccessToken()
 {
     m_pLoginDialog->clearWebView();
     if(m_strTokenAddress.isEmpty())
@@ -158,8 +163,8 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
         qDebug() << "refresh_toke: " << result["refresh_token"].toString();
         m_strAccessToken = result["access_token"].toString();
         m_strRefreshToken = result["refresh_token"].toString();
-        conf.setValue("token",result["access_token"].toString());
-        conf.setValue("refresh_token", result["refresh_token"].toString());
+       // conf.setValue("token",result["access_token"].toString());
+       // conf.setValue("refresh_token", result["refresh_token"].toString());
         emit loginDone();
         m_pLoginDialog->close();
     }

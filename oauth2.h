@@ -7,7 +7,6 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QByteArray>
-#include <QSettings>
 #include "qtjson/json.h"
 class LoginDialog;
 
@@ -17,7 +16,8 @@ class OAuth2 : public QObject
 
 public:
     OAuth2(QWidget* parent = 0);
-    QString accessToken();
+    QString getAccessToken();
+    QString getRefreshToken();
     bool isAuthorized();
     void startLogin(bool bForce);
 
@@ -38,7 +38,7 @@ signals:
 private slots:
     void accessTokenObtained();
     void slotAccessCodeObtained();
-    void getAccessToken();
+    void obtainAccessToken();
     void slotProcessPostReply(QNetworkReply*);
 
 private:
