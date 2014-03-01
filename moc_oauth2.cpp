@@ -22,7 +22,7 @@ static const uint qt_meta_data_OAuth2[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -37,6 +37,7 @@ static const uint qt_meta_data_OAuth2[] = {
       42,    7,    7,    7, 0x08,
       67,    7,    7,    7, 0x08,
       87,    7,    7,    7, 0x08,
+     124,    7,    7,    7, 0x08,
 
        0        // eod
 };
@@ -45,6 +46,7 @@ static const char qt_meta_stringdata_OAuth2[] = {
     "OAuth2\0\0loginDone()\0accessTokenObtained()\0"
     "slotAccessCodeObtained()\0obtainAccessToken()\0"
     "slotProcessPostReply(QNetworkReply*)\0"
+    "refreshAccessToken()\0"
 };
 
 void OAuth2::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -58,6 +60,7 @@ void OAuth2::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 2: _t->slotAccessCodeObtained(); break;
         case 3: _t->obtainAccessToken(); break;
         case 4: _t->slotProcessPostReply((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
+        case 5: _t->refreshAccessToken(); break;
         default: ;
         }
     }
@@ -95,9 +98,9 @@ int OAuth2::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }

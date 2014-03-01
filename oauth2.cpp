@@ -70,7 +70,16 @@ QString OAuth2::tokenUrl()
 
 QString OAuth2::getAccessToken()
 {
-    return m_strAccessToken;
+    if(isTokenValid())
+    {
+        return m_strAccessToken;
+    }
+    else
+    {
+        qDebug()  << "QString OAuth2::getAccessToken() : " << "isNotValid() ";
+        obtainAccessToken();
+        return m_strAccessToken;
+    }
 }
 
 QString OAuth2::getRefreshToken()
@@ -109,9 +118,9 @@ void OAuth2::startLogin(bool bForce)
 
 void OAuth2::accessTokenObtained()
 {
-    QSettings settings(m_strCompanyName, m_strAppName);
+   // QSettings settings(m_strCompanyName, m_strAppName);
     m_strAccessToken = m_pLoginDialog->accessToken();
-    settings.setValue("access_token", m_strAccessToken);
+   // settings.setValue("access_token", m_strAccessToken);
     emit loginDone();
 
 }
@@ -128,7 +137,8 @@ void OAuth2::slotAccessCodeObtained()
 
 void OAuth2::obtainAccessToken()
 {
-    m_pLoginDialog->clearWebView();
+   // m_pLoginDialog->clearWebView();
+    qDebug()  << "obtainaccess token";
     if(m_strTokenAddress.isEmpty())
     {
         qDebug() << "token adress should be set by setTokenAdress()";
@@ -174,6 +184,29 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
     }
 
 
+}
+
+void OAuth2::refreshAccessToken()
+{
+    //m_pLoginDialog->clearWebView();
+    if(m_strTokenAddress.isEmpty())
+    {
+        qDebug() << "token adress should be set by setTokenAdress()";
+        return;
+    }
+    QNetworkAccessManager *nwam =  new QNetworkAccessManager();
+    QNetworkRequest *request = new QNetworkRequest(QUrl(m_strTokenAddress));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    QByteArray data;
+    QUrl params;
+    params.addQueryItem("grant_type","refresh_token");
+    params.addQueryItem("client_id",m_strClientID);
+    params.addQueryItem("client_secret",m_strClientSecret);
+    params.addQueryItem("code",  m_strAccessCode );
+    data.append(params.encodedQuery());
+    //data.remove(0,1);
+    nwam->post(*request,data);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
 }
 
 bool OAuth2::isTokenValid()
