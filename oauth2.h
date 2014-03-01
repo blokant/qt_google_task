@@ -40,7 +40,7 @@ private slots:
     void slotAccessCodeObtained();
     void obtainAccessToken();
     void slotProcessPostReply(QNetworkReply*);
-    void refreshAccessToken(); // should be in a separate threada
+    void refreshAccessToken(); // should be in a separate thread
 
 private:
     QString loginUrl();

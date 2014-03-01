@@ -18,6 +18,7 @@ public:
 private:
     Ui::Dialog *ui;
     OAuth2 *m_pOAuth2;
+    QSettings *conf;
 public slots:
     void slotLoginDone();
 };
