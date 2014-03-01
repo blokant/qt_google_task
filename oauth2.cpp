@@ -94,8 +94,8 @@ bool OAuth2::isAuthorized()
 
 void OAuth2::startLogin(bool bForce)
 {
-    QSettings settings(m_strCompanyName, m_strAppName);
-    QString str = settings.value("access_token", "").toString();
+  //  QSettings settings(m_strCompanyName, m_strAppName);
+    QString str = conf->value("access_token", "").toString();
     if(m_strClientID == "YOUR_CLIENT_ID_HERE" || m_strRedirectURI == "YOUR_REDIRECT_URI_HERE")
     {
         QMessageBox::warning(m_pParent, "Warning",
@@ -108,6 +108,7 @@ void OAuth2::startLogin(bool bForce)
     {
         m_pLoginDialog->setLoginUrl(loginUrl());
         m_pLoginDialog->show();
+        //m_pLoginDialog->setModal(false);
     }
     else
     {
