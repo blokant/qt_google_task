@@ -72,19 +72,19 @@ QString OAuth2::getAccessToken()
 {
     if(isTokenValid())
     {
-        return m_strAccessToken;
+        return conf->value("access_token").toString();
     }
     else
     {
         qDebug()  << "QString OAuth2::getAccessToken() : " << "isNotValid() ";
         refreshAccessToken();
-        return m_strAccessToken;
+        return conf->value("access_token").toString();
     }
 }
 
 QString OAuth2::getRefreshToken()
 {
-    return m_strRefreshToken;
+    return conf->value("refresh_token").toString();
 }
 
 bool OAuth2::isAuthorized()
@@ -188,6 +188,7 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
         {
             m_strRefreshToken = result["refresh_token"].toString();
             conf->setValue("refresh_token", m_strRefreshToken);
+            qDebug() << "getting value: " << m_strRefreshToken;
         }
         else
         {
@@ -199,7 +200,7 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 
         //conf->setValue("token",result["access_token"].toString());
 
-       // emit loginDone();
+        emit loginDone();
         //if(m_pLoginDialog->isActiveWindow())
             m_pLoginDialog->close();
     }
