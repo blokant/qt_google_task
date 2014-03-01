@@ -33,4 +33,5 @@ void Dialog::slotLoginDone()
         conf.setValue("refresh_token" ,m_pOAuth2->getRefreshToken());
     }
     qDebug() << conf.value("refresh_token").toString();
+    qDebug() << "isvalid: " << m_pOAuth2->isTokenValid();
 }

@@ -24,6 +24,7 @@ OAuth2::OAuth2(QWidget* parent)
     m_pParent = parent;
   //  connect(m_pLoginDialog, SIGNAL(accessTokenObtained()), this, SLOT(accessTokenObtained()));
     connect(m_pLoginDialog, SIGNAL(accessCodeObtained()) , this, SLOT(slotAccessCodeObtained()) );
+    conf = new QSettings("MegawarpSoftware", "goauth");
 }
 
 void OAuth2::setScope(const QString& scope)
@@ -152,19 +153,22 @@ void OAuth2::obtainAccessToken()
 
 void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 {
-    QSettings conf("MegawarpSoftware", "taskman");
     QString json = r->readAll();
-    qDebug() << "reply: " << json;
+   // qDebug() << "reply: " << json;
     bool ok;
     JsonObject result = QtJson::parse(json, ok).toMap();
     if (ok)
     {
-        qDebug() << "token: " << result["access_token"].toString();
-        qDebug() << "refresh_toke: " << result["refresh_token"].toString();
+    //    qDebug() << "token: " << result["access_token"].toString();
+     //   qDebug() << "refresh_toke: " << result["refresh_token"].toString();
         m_strAccessToken = result["access_token"].toString();
         m_strRefreshToken = result["refresh_token"].toString();
-       // conf.setValue("token",result["access_token"].toString());
-       // conf.setValue("refresh_token", result["refresh_token"].toString());
+        conf->setValue("access_token", m_strAccessToken);
+        //QDateTime dt();
+        //dt.currentDateTime().toString()
+        conf->setValue("token_obtained",QDateTime::currentDateTime().toString());
+        //conf->setValue("token",result["access_token"].toString());
+        conf->setValue("refresh_token", m_strRefreshToken);
         emit loginDone();
         m_pLoginDialog->close();
     }
@@ -172,4 +176,14 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 
 }
 
-
+bool OAuth2::isTokenValid()
+{
+    QDateTime tokenObtained = QDateTime::fromString(conf->value("token_obtained").toString());
+  /*  qDebug() << "In isValid() : ";
+    qDebug() << "obtained: " << tokenObtained.toString();
+    qDebug() << "current : " << QDateTime::currentDateTime().toString();
+    qDebug() << "dif: " << tokenObtained.secsTo(QDateTime::currentDateTime()) <<  " sec";
+   */ if(tokenObtained.secsTo(QDateTime::currentDateTime()) > 3600)
+        return false;
+    return true;
+}

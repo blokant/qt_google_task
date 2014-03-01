@@ -7,6 +7,8 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QByteArray>
+#include <QSettings>
+#include <QDateTime>
 #include "qtjson/json.h"
 class LoginDialog;
 
@@ -27,9 +29,7 @@ public:
     void setRedirectURI(const QString& redirectURI);
     void setCompanyName(const QString& companyName);
     void setAppName(const QString& appName);
-
-    QString loginUrl();
-    QString tokenUrl();
+    bool isTokenValid();
 
 signals:
     //Signal that is emitted when login is ended OK.
@@ -42,6 +42,9 @@ private slots:
     void slotProcessPostReply(QNetworkReply*);
 
 private:
+    QString loginUrl();
+    QString tokenUrl();
+
     QString m_strAccessToken;
     QString m_strRefreshToken;
     QString m_strAccessCode;
@@ -53,12 +56,11 @@ private:
     QString m_strClientID;
     QString m_strRedirectURI;
     QString m_strResponseType;
-
     QString m_strCompanyName;
     QString m_strAppName;
-
     LoginDialog* m_pLoginDialog;
     QWidget* m_pParent;
+    QSettings *conf;
 };
 
 #endif // OAUTH2_H
