@@ -76,7 +76,7 @@ QString OAuth2::getAccessToken()
     }
     else
     {
-        qDebug()  << "QString OAuth2::getAccessToken() : " << "isNotValid() ";
+        qDebug()  << "QString OAuth2::getAccessToken() : " << "isNotValid() starting to refresh";
         refreshAccessToken();
         return conf->value("access_token").toString();
     }
@@ -164,8 +164,14 @@ void OAuth2::obtainAccessToken()
 
 void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 {
+    qDebug() << "slotProcessPostReply()";
     QString json = r->readAll();
     qDebug() << "reply: " << json;
+    if(json.contains("token") == false)
+    {
+        qDebug() << "json does not contain token info";
+        return;
+    }
     bool ok;
     JsonObject result = QtJson::parse(json, ok).toMap();
     if (ok)
@@ -204,6 +210,10 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
         //if(m_pLoginDialog->isActiveWindow())
             m_pLoginDialog->close();
     }
+    else
+    {
+        qDebug() << "can not parse json reply";
+    }
 
 
 }
@@ -211,6 +221,7 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 void OAuth2::refreshAccessToken()
 {
     //m_pLoginDialog->clearWebView();
+
     qDebug() << "refreshAccessToken()";
     if(m_strTokenAddress.isEmpty())
     {
@@ -222,14 +233,17 @@ void OAuth2::refreshAccessToken()
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     QByteArray data;
     QUrl params;
-    params.addQueryItem("grant_type","refresh_token");
-    params.addQueryItem("client_id",m_strClientID);
     params.addQueryItem("client_secret",m_strClientSecret);
-    params.addQueryItem("refresh_token",  m_strRefreshToken );
-    qDebug() << "refresh token in params: " << m_strRefreshToken;
+    params.addQueryItem("grant_type","refresh_token");
+    params.addQueryItem("refresh_token",  conf->value("refresh_token").toString() );
+    params.addQueryItem("client_id",m_strClientID);
+
+
+  //  qDebug() << "refresh token in params: " << m_strRefreshToken;
     data.append(params.encodedQuery());
     //data.remove(0,1);
     nwam->post(*request,data);
+    qDebug() << "data: " << data;
     connect(nwam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
 }
 
