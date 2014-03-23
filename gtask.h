@@ -13,6 +13,18 @@ signals:
 
 public slots:
 
+    QString getId(){return id;}
+    QString getEtag(){return etag;}
+    QString getTitle(){return title;}
+    QString getSelfLink(){return selflink;}
+    QString getParent(){return parent;}
+    QString getPosition(){return position;}
+    QString getNotes(){return notes;}
+    QString getStatus(){return status;}
+    bool isHidden(){return hidden;}
+    bool isDeleted(){return deleted;}
+    QDateTime getDueTo(){return due;}
+    QDateTime getUpdated(){return updated;}
 
 private:
 
