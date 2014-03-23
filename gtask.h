@@ -13,9 +13,9 @@ signals:
 
 public slots:
 
+
 private:
-    struct google_task_struct
-    {
+
         QString id;
         QString etag;
         QString title;
@@ -28,7 +28,7 @@ private:
         bool hidden;
         QDateTime due;
         QDateTime updated;
-    };
+
 };
 
 #endif // GTASK_H
