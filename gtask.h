@@ -25,6 +25,17 @@ public slots:
     bool isDeleted(){return deleted;}
     QDateTime getDueTo(){return due;}
     QDateTime getUpdated(){return updated;}
+    //void setId(QString newid){id = newid;}
+    //void setEtag(QString newetag){etag = newetag;}
+    void setTitle(QString newTitle){title = newTitle;}
+    void setNotes(QString newNotes){notes = newNotes;}
+    void setPosition(QString newPosition){position = newPosition;}
+    void setStatus(QString newStatus){ status = newStatus;}
+    void setDeleted(bool flag){deleted = flag;}
+    void setHidden(bool  flag){hidden  = flag;}
+    void setDue(QDateTime newDue){due = newDue;}
+    void setUpdated(QDateTime newUpdated){updated = newUpdated;}
+    //void setSelf
 
 private:
 
