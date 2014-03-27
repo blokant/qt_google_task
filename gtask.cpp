@@ -3,4 +3,7 @@
 gTask::gTask(QObject *parent) :
     QObject(parent)
 {
+    deleted = false;
+    hidden  = false;
+
 }

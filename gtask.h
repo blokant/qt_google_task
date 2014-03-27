@@ -17,7 +17,7 @@ public slots:
     QString getEtag(){return etag;}
     QString getTitle(){return title;}
     QString getSelfLink(){return selflink;}
-    QString getParent(){return parent;}
+    QString getParentTask(){return parentTask;}
     QString getPosition(){return position;}
     QString getNotes(){return notes;}
     QString getStatus(){return status;}
@@ -30,6 +30,7 @@ public slots:
     void setTitle(QString newTitle){title = newTitle;}
     void setNotes(QString newNotes){notes = newNotes;}
     void setPosition(QString newPosition){position = newPosition;}
+    void setParentTask(QString ParentId){parentTask = ParentId;}
     void setStatus(QString newStatus){ status = newStatus;}
     void setDeleted(bool flag){deleted = flag;}
     void setHidden(bool  flag){hidden  = flag;}
@@ -43,7 +44,7 @@ private:
         QString etag;
         QString title;
         QString selflink;
-        QString parent;
+        QString parentTask;
         QString position;
         QString notes;
         QString status;
