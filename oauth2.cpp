@@ -128,7 +128,7 @@ void OAuth2::accessTokenObtained()
 
 void OAuth2::slotAccessCodeObtained()
 {
-    qDebug() << "code obtained and it's : " << m_pLoginDialog->accessCode();
+  //  qDebug() << "code obtained and it's : " << m_pLoginDialog->accessCode();
     m_strAccessCode = m_pLoginDialog->accessCode();
    // qDebug() << "token String: " << tokenUrl();
     m_pLoginDialog->setLoginUrl(tokenUrl());
@@ -139,7 +139,7 @@ void OAuth2::slotAccessCodeObtained()
 void OAuth2::obtainAccessToken()
 {
     m_pLoginDialog->clearWebView();
-    qDebug()  << "obtainaccess token";
+ //   qDebug()  << "obtainaccess token";
     if(m_strTokenAddress.isEmpty())
     {
         qDebug() << "token adress should be set by setTokenAdress()";
@@ -164,9 +164,9 @@ void OAuth2::obtainAccessToken()
 
 void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 {
-    qDebug() << "slotProcessPostReply()";
+   // qDebug() << "slotProcessPostReply()";
     QString json = r->readAll();
-    qDebug() << "reply: " << json;
+  //  qDebug() << "reply: " << json;
     if(json.contains("token") == false)
     {
         qDebug() << "json does not contain token info";
@@ -222,7 +222,7 @@ void OAuth2::refreshAccessToken()
 {
     //m_pLoginDialog->clearWebView();
 
-    qDebug() << "refreshAccessToken()";
+  //  qDebug() << "refreshAccessToken()";
     if(m_strTokenAddress.isEmpty())
     {
         qDebug() << "token adress should be set by setTokenAdress()";

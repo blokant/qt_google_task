@@ -28,14 +28,15 @@ QList<gTaskList*> gTaskHelper::getTaskLists()
     QString at = "Bearer " + accessToken;
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
     QByteArray data;
-    QUrl params;
-    params.addQueryItem("Authorization: ","Bearer " + accessToken);
+    //QUrl params;
+    //params.addQueryItem("Authorization: ","Bearer " + accessToken);
 
 
     //data.append(params.encodedQuery());
     //data.remove(0,1);
     QNetworkReply *r = nwam->post(*request,data);
    // qDebug() << "data: " << data;
+
     QEventLoop loop;
     //connect(nwam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()) );
     connect(r, SIGNAL(readyRead()), &loop, SLOT(quit()) );

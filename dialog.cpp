@@ -31,11 +31,11 @@ void Dialog::slotLoginDone()
         conf->setValue("access_token" , m_pOAuth2->getAccessToken());
         conf->setValue("refresh_token" ,m_pOAuth2->getRefreshToken());
     }
-    qDebug() << "in dialog:" << conf->value("refresh_token").toString();
-    qDebug() << "isvalid: " << m_pOAuth2->isTokenValid();
-    qDebug() << "access_token: " << m_pOAuth2->getAccessToken();
-    qDebug() << "m_pOAuth2->getat(): " << m_pOAuth2->getAccessToken();
-    qDebug() << "m_pOAuth2->getrt(): " << m_pOAuth2->getRefreshToken();
+  //  qDebug() << "in dialog:" << conf->value("refresh_token").toString();
+  //  qDebug() << "isvalid: " << m_pOAuth2->isTokenValid();
+  //  qDebug() << "access_token: " << m_pOAuth2->getAccessToken();
+  //  qDebug() << "m_pOAuth2->getat(): " << m_pOAuth2->getAccessToken();
+  //  qDebug() << "m_pOAuth2->getrt(): " << m_pOAuth2->getRefreshToken();
     gTaskHelper th;
     th.setAccessToken(m_pOAuth2->getAccessToken());
     th.getTaskLists();
