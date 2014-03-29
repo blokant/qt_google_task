@@ -5,7 +5,6 @@
 #include <QString>
 #include <QUrl>
 
-
 namespace Ui {
     class LoginDialog;
 }

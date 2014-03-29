@@ -36,4 +36,7 @@ void Dialog::slotLoginDone()
     qDebug() << "access_token: " << m_pOAuth2->getAccessToken();
     qDebug() << "m_pOAuth2->getat(): " << m_pOAuth2->getAccessToken();
     qDebug() << "m_pOAuth2->getrt(): " << m_pOAuth2->getRefreshToken();
+    gTaskHelper th;
+    th.setAccessToken(m_pOAuth2->getAccessToken());
+    th.getTaskLists();
 }

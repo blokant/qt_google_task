@@ -2,6 +2,7 @@
 #define DIALOG_H
 #include <QSettings>
 #include <QDialog>
+#include "gtaskhelper.h"
 #include "oauth2.h"
 namespace Ui {
 class Dialog;
