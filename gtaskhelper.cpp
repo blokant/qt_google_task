@@ -24,25 +24,29 @@ QList<gTaskList*> gTaskHelper::getTaskLists()
 
     QNetworkAccessManager *nwam =  new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl));
-    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
     QByteArray data;
     QUrl params;
-    params.addQueryItem("access_token",accessToken);
+    params.addQueryItem("Authorization: ","Bearer " + accessToken);
 
 
-    data.append(params.encodedQuery());
+    //data.append(params.encodedQuery());
     //data.remove(0,1);
     QNetworkReply *r = nwam->post(*request,data);
+   // qDebug() << "data: " << data;
     QEventLoop loop;
-    connect(nwam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()) );
-    qDebug() << "inside event loop";
+    //connect(nwam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()) );
+    connect(r, SIGNAL(readyRead()), &loop, SLOT(quit()) );
+   // qDebug() << "inside event loop";
     loop.exec();
-    if(!r->waitForReadyRead(3000))
+    /*if(!r->waitForReadyRead(3000))
     {
         qDebug() << "data is not available";
         return tl;
-    }
-    r->readAll();
-    qDebug() << r->size();
+    }*/
+    QByteArray ba = r->readAll();
+    qDebug() << ba;
     return tl;
 }
