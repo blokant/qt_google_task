@@ -8,6 +8,7 @@ class gTask : public QObject
     Q_OBJECT
 public:
     explicit gTask(QObject *parent = 0);
+    gTask(QString taskTitle, QString taskListId);
 
 signals:
 
@@ -16,6 +17,7 @@ public slots:
     QString getId(){return id;}
     QString getEtag(){return etag;}
     QString getTitle(){return title;}
+    QString getListId(){return listId;}
     QString getSelfLink(){return selflink;}
     QString getParentTask(){return parentTask;}
     QString getPosition(){return position;}
@@ -25,8 +27,6 @@ public slots:
     bool isDeleted(){return deleted;}
     QDateTime getDueTo(){return due;}
     QDateTime getUpdated(){return updated;}
-    //void setId(QString newid){id = newid;}
-    //void setEtag(QString newetag){etag = newetag;}
     void setTitle(QString newTitle){title = newTitle;}
     void setNotes(QString newNotes){notes = newNotes;}
     void setPosition(QString newPosition){position = newPosition;}
@@ -36,7 +36,7 @@ public slots:
     void setHidden(bool  flag){hidden  = flag;}
     void setDue(QDateTime newDue){due = newDue;}
     void setUpdated(QDateTime newUpdated){updated = newUpdated;}
-    //void setSelf
+
 
 private:
 
@@ -52,7 +52,7 @@ private:
         bool hidden;
         QDateTime due;
         QDateTime updated;
-
+        QString listId;
 };
 
 #endif // GTASK_H
