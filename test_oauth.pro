@@ -17,12 +17,14 @@ SOURCES += main.cpp\
     oauth2.cpp \
     logindialog.cpp \
     qtjson/json.cpp \
-    gtask.cpp
+    gtask.cpp \
+    gtasklist.cpp
 
 HEADERS  += dialog.h \
     oauth2.h \
     logindialog.h \
     qtjson/json.h \
-    gtask.h
+    gtask.h \
+    gtasklist.h
 
 FORMS    += dialog.ui

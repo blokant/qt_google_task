@@ -36,7 +36,7 @@ public slots:
     void setHidden(bool  flag){hidden  = flag;}
     void setDue(QDateTime newDue){due = newDue;}
     void setUpdated(QDateTime newUpdated){updated = newUpdated;}
-
+    //isOverDue?
 
 private:
 
