@@ -239,7 +239,7 @@ void OAuth2::refreshAccessToken()
     params.addQueryItem("client_id",m_strClientID);
 
 
-  //  qDebug() << "refresh token in params: " << m_strRefreshToken;
+  //  qDebug() << "refresh token in params: " <<->get(*request,data); m_strRefreshToken;
     data.append(params.encodedQuery());
     //data.remove(0,1);
     nwam->post(*request,data);
