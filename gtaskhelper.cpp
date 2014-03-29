@@ -38,7 +38,15 @@ QList<gTaskList*> gTaskHelper::getTaskLists()
         qDebug() << "data is not available";
         return tl;
     }*/
-    QByteArray ba = r->readAll();
+    disconnect(&loop,SLOT(quit()) );
+    QByteArray ba;
+    while(r->bytesAvailable() > 0)
+    {
+        ba += r->readAll();
+        //r->waitForReadyRead(3000);
+        qDebug() << "inside the loop";
+        qDebug() << "bytes available: " << r->bytesAvailable();
+    }
     qDebug() << ba;
     return tl;
 }
