@@ -12,13 +12,13 @@ void gTaskHelper::setAccessToken(QString strAccessToken)
     accessToken = strAccessToken;
 }
 
-QList<gTaskList*> gTaskHelper::getTaskLists()
+void gTaskHelper::getTaskLists()
 {
-    QList <gTaskList*> tl;
+   // QList <gTaskList*> tl;
     if(accessToken.isEmpty())
     {
         qDebug() << "Error: access token is empty";
-        return tl;
+        return ;//tl;
     }
 
 
@@ -49,5 +49,5 @@ QList<gTaskList*> gTaskHelper::getTaskLists()
         qDebug() << "bytes available: " << r->bytesAvailable();
     }
     qDebug() << ba;
-    return tl;
+    //return tl;
 }

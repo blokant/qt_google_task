@@ -19,7 +19,7 @@ public:
 signals:
 
 public slots:
-    QList<gTaskList*> getTaskLists();
+    void getTaskLists();
 private:
     QString listUrl;
     QString accessToken;
