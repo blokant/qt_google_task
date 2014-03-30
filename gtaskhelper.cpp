@@ -4,6 +4,7 @@ gTaskHelper::gTaskHelper(QObject *parent) :
     QObject(parent)
 {
     listUrl = "https://www.googleapis.com/tasks/v1/users/@me/lists";
+    //listUrl = "http://habrahabr.ru";
 }
 
 void gTaskHelper::setAccessToken(QString strAccessToken)
@@ -29,8 +30,8 @@ QList<gTaskList*> gTaskHelper::getTaskLists()
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
     QNetworkReply *r = nwam->get(*request);
     QEventLoop loop;
-    //connect(nwam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()) );
-    connect(r, SIGNAL(readyRead()), &loop, SLOT(quit()) );
+    connect(nwam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()) );
+    //connect(r, SIGNAL(readyRead()), &loop, SLOT(quit()) );
    // qDebug() << "inside event loop";
     loop.exec();
     /*if(!r->waitForReadyRead(3000))
