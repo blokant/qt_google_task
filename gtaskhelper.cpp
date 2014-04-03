@@ -1,5 +1,6 @@
 #include "gtaskhelper.h"
-
+#include <QMessageBox>
+#include <QCoreApplication>
 gTaskHelper::gTaskHelper(QObject *parent) :
     QObject(parent)
 {
@@ -28,26 +29,27 @@ void gTaskHelper::getTaskLists()
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QString at = "Bearer " + accessToken;
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
-    QNetworkReply *r = nwam->get(*request);
-    QEventLoop loop;
-    connect(nwam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()) );
-    //connect(r, SIGNAL(readyRead()), &loop, SLOT(quit()) );
+    nwam->get(*request);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTaskListsReply(QNetworkReply*)) );
+    //QCoreApplication::exec();
+    // execute an event loop to process the request (nearly-synchronous)
+    QEventLoop eventLoop;
+    // also dispose the event loop after the reply has arrived
+    connect(nwam, SIGNAL(finished(QNetworkReply *)), &eventLoop, SLOT(quit()));
    // qDebug() << "inside event loop";
-    loop.exec();
-    /*if(!r->waitForReadyRead(3000))
-    {
-        qDebug() << "data is not available";
-        return tl;
-    }*/
-    disconnect(&loop,SLOT(quit()) );
-    QByteArray ba;
-    while(r->bytesAvailable() > 0)
-    {
-        ba += r->readAll();
-        //r->waitForReadyRead(3000);
-        qDebug() << "inside the loop";
-        qDebug() << "bytes available: " << r->bytesAvailable();
-    }
+    eventLoop.exec();
+
+    //QMessageBox mb;
+    //mb.setWindowTitle("test");
+    //connect(r, SIGNAL(finished()), &mb, SLOT(exec()) );
+
+    //mb.exec();
+    //connect(nwam, SIGNAL(finished(QNetworkReply*)), &mb, SLOT(exec()) );
+}
+
+void gTaskHelper::processTaskListsReply(QNetworkReply *r)
+{
+    qDebug() << "processTaskListsReply();";
+    QByteArray ba = r->readAll();
     qDebug() << ba;
-    //return tl;
 }

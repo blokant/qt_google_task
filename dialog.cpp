@@ -25,7 +25,7 @@ Dialog::~Dialog()
 void Dialog::slotLoginDone()
 {
     //QSettings conf("MegawarpSoftware", "taskman");
-    qDebug() << "slot login done";
+  //  qDebug() << "slot login done";
     if(conf->value("refresh_token").toString().isEmpty())
     {
         conf->setValue("access_token" , m_pOAuth2->getAccessToken());

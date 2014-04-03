@@ -20,6 +20,7 @@ signals:
 
 public slots:
     void getTaskLists();
+    void processTaskListsReply(QNetworkReply*);
 private:
     QString listUrl;
     QString accessToken;
