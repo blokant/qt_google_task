@@ -15,6 +15,7 @@ class gTaskHelper : public QObject
     Q_OBJECT
 public:
     explicit gTaskHelper(QObject *parent = 0);
+    gTaskHelper(QNetworkAccessManager*);
     void setAccessToken(QString strAccessToken);
 signals:
 
@@ -24,6 +25,7 @@ public slots:
 private:
     QString listUrl;
     QString accessToken;
+    QNetworkAccessManager *qnam;
 };
 
 #endif // GTASKHELPER_H

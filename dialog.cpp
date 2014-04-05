@@ -6,20 +6,26 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    m_pOAuth2 = new OAuth2(this);
-    connect(m_pOAuth2, SIGNAL(loginDone()), this, SLOT(slotLoginDone()));
+    //m_pOAuth2 = new OAuth2(this);
     conf = new QSettings("MegawarpSoftware", "taskman");
     //m_pOAuth2->getAccessToken();
+    //qDebug() << "Befire"
+    qnam = new QNetworkAccessManager();
+    m_pOAuth2 = new OAuth2(this,qnam);
+    connect(m_pOAuth2, SIGNAL(loginDone()), this, SLOT(slotLoginDone()));
     QString v = conf->value("refresh_token").toString();
     if(v.isEmpty())
         m_pOAuth2->startLogin(false);
     else
         slotLoginDone();
+
 }
 
 Dialog::~Dialog()
 {
     delete ui;
+    delete(qnam);
+    delete(m_pOAuth2);
 }
 
 void Dialog::slotLoginDone()
@@ -31,12 +37,13 @@ void Dialog::slotLoginDone()
         conf->setValue("access_token" , m_pOAuth2->getAccessToken());
         conf->setValue("refresh_token" ,m_pOAuth2->getRefreshToken());
     }
-  //  qDebug() << "in dialog:" << conf->value("refresh_token").toString();
-  //  qDebug() << "isvalid: " << m_pOAuth2->isTokenValid();
-  //  qDebug() << "access_token: " << m_pOAuth2->getAccessToken();
-  //  qDebug() << "m_pOAuth2->getat(): " << m_pOAuth2->getAccessToken();
-  //  qDebug() << "m_pOAuth2->getrt(): " << m_pOAuth2->getRefreshToken();
-    gTaskHelper th;
+  /*  qDebug() << "in dialog:" << conf->value("refresh_token").toString();
+    qDebug() << "isvalid: " << m_pOAuth2->isTokenValid();
+    qDebug() << "access_token: " << m_pOAuth2->getAccessToken();
+    qDebug() << "m_pOAuth2->getat(): " << m_pOAuth2->getAccessToken();
+    qDebug() << "m_pOAuth2->getrt(): " << m_pOAuth2->getRefreshToken();
+    */
+    gTaskHelper th(qnam);
     th.setAccessToken(m_pOAuth2->getAccessToken());
     th.getTaskLists();
 }

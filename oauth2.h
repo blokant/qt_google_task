@@ -18,6 +18,7 @@ class OAuth2 : public QObject
 
 public:
     OAuth2(QWidget* parent = 0);
+    OAuth2(QWidget *parent, QNetworkAccessManager*);
     QString getAccessToken();
     QString getRefreshToken();
     bool isAuthorized();
@@ -62,6 +63,7 @@ private:
     LoginDialog* m_pLoginDialog;
     QWidget* m_pParent;
     QSettings *conf;
+    QNetworkAccessManager *qnam;
 };
 
 #endif // OAUTH2_H

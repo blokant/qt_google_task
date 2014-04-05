@@ -26,6 +26,25 @@ OAuth2::OAuth2(QWidget* parent)
     connect(m_pLoginDialog, SIGNAL(accessCodeObtained()) , this, SLOT(slotAccessCodeObtained()) );
     conf = new QSettings("MegawarpSoftware", "goauth");
 }
+OAuth2::OAuth2(QWidget* parent, QNetworkAccessManager *qnam)
+{
+    m_strEndPoint = "https://accounts.google.com/o/oauth2/auth";
+    m_strTokenAddress = "https://accounts.google.com/o/oauth2/token";
+    m_strScope = "https://www.googleapis.com/auth/tasks";
+    m_strClientID = "773994449559-57kdeaogcku39qk3ceqqbebm6fsudc5u.apps.googleusercontent.com";
+    m_strRedirectURI = "urn:ietf:wg:oauth:2.0:oob";
+    m_strClientSecret = "VDtJ21xZOPotTg7o7UJz3MbT";
+    m_strResponseType = "code";
+    m_strGrantType = "authorization_code";
+    m_strCompanyName = "GTasksManager"; //You company here
+    m_strAppName = "test_app_name"; //Your application name here
+    m_pLoginDialog = new LoginDialog(parent);
+    m_pParent = parent;
+  //  connect(m_pLoginDialog, SIGNAL(accessTokenObtained()), this, SLOT(accessTokenObtained()));
+    connect(m_pLoginDialog, SIGNAL(accessCodeObtained()) , this, SLOT(slotAccessCodeObtained()) );
+    conf = new QSettings("MegawarpSoftware", "goauth");
+    this->qnam = qnam;
+}
 
 void OAuth2::setScope(const QString& scope)
 {
@@ -94,6 +113,7 @@ bool OAuth2::isAuthorized()
 
 void OAuth2::startLogin(bool bForce)
 {
+
   //  QSettings settings(m_strCompanyName, m_strAppName);
     QString str = conf->value("access_token", "").toString();
     if(m_strClientID == "YOUR_CLIENT_ID_HERE" || m_strRedirectURI == "YOUR_REDIRECT_URI_HERE")
@@ -145,7 +165,7 @@ void OAuth2::obtainAccessToken()
         qDebug() << "token adress should be set by setTokenAdress()";
         return;
     }
-    QNetworkAccessManager *nwam =  new QNetworkAccessManager();
+    QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(m_strTokenAddress));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     QByteArray data;
@@ -228,7 +248,7 @@ void OAuth2::refreshAccessToken()
         qDebug() << "token adress should be set by setTokenAdress()";
         return;
     }
-    QNetworkAccessManager *nwam =  new QNetworkAccessManager();
+    QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(m_strTokenAddress));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     QByteArray data;

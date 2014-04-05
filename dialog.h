@@ -3,6 +3,7 @@
 #include <QSettings>
 #include <QDialog>
 #include "gtaskhelper.h"
+#include <QNetworkAccessManager>
 #include "oauth2.h"
 namespace Ui {
 class Dialog;
@@ -20,6 +21,7 @@ private:
     Ui::Dialog *ui;
     OAuth2 *m_pOAuth2;
     QSettings *conf;
+    QNetworkAccessManager *qnam;
 public slots:
     void slotLoginDone();
 };
