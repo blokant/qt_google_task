@@ -188,6 +188,7 @@ void OAuth2::obtainAccessToken()
 void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
 {
     qDebug() << "slotProcessPostReply()";
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
     QString json = r->readAll();
     qDebug() << "reply: " << json;
     if(json.contains("token") == false)
@@ -238,12 +239,17 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
         qDebug() << "can not parse json reply";
     }
 
-    disconnect(this, SLOT(slotProcessPostReply(QNetworkReply*)) );
+  //  disconnect(this, SLOT(slotProcessPostReply(QNetworkReply*)) );
 }
 
 void OAuth2::slotProcessRefreshedToken(QNetworkReply *r)
 {
+    qDebug() << "slotProcessRefreshedToken();";
+    //disconnect(this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
+    //qnam->blockSignals(true);
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
     QString json = r->readAll();
+    r->deleteLater();
     qDebug() << "reply: " << json;
     if(json.contains("token") == false)
     {
@@ -268,7 +274,6 @@ void OAuth2::slotProcessRefreshedToken(QNetworkReply *r)
             conf->setValue("access_token", m_strAccessToken);
             conf->setValue("token_obtained",QDateTime::currentDateTime().toString());
         }
-        disconnect(this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
         emit AccessTokenArrived(conf->value("access_token").toString());
        // emit loginDone();
         //if(m_pLoginDialog->isActiveWindow())
@@ -278,7 +283,7 @@ void OAuth2::slotProcessRefreshedToken(QNetworkReply *r)
     {
         qDebug() << "can not parse json reply";
     }
-
+   // r->deleteLater();
 
 }
 
@@ -308,7 +313,6 @@ void OAuth2::refreshAccessToken()
     //data.remove(0,1);
     nwam->post(*request,data);
     qDebug() << "data: " << data;
-    //connect(nwam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) ); // should be differ from the processpostreply
     connect(nwam, SIGNAL(finished(QNetworkReply*))  , this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
 }
 

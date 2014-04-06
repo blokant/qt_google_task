@@ -28,8 +28,6 @@ void gTaskHelper::getTaskLists()
         return ;//tl;
     }
 
-
-
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
