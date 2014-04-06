@@ -19,7 +19,7 @@ class OAuth2 : public QObject
 public:
     OAuth2(QWidget* parent = 0);
     OAuth2(QWidget *parent, QNetworkAccessManager*);
-    QString getAccessToken();
+    void getAccessToken();
     QString getRefreshToken();
     bool isAuthorized();
     void startLogin(bool bForce);
@@ -35,12 +35,14 @@ public:
 signals:
     //Signal that is emitted when login is ended OK.
     void loginDone();
+    void AccessTokenArrived(QString at);
 
 private slots:
     void accessTokenObtained();
     void slotAccessCodeObtained();
     void obtainAccessToken();
     void slotProcessPostReply(QNetworkReply*);
+    void slotProcessRefreshedToken(QNetworkReply*);
     void refreshAccessToken(); // should be in a separate thread
 
 private:

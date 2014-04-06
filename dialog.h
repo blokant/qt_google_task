@@ -24,6 +24,7 @@ private:
     QNetworkAccessManager *qnam;
 public slots:
     void slotLoginDone();
+    void slotTokenObtained(QString);
 };
 
 #endif // DIALOG_H

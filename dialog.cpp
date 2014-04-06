@@ -34,8 +34,8 @@ void Dialog::slotLoginDone()
   //  qDebug() << "slot login done";
     if(conf->value("refresh_token").toString().isEmpty())
     {
-        conf->setValue("access_token" , m_pOAuth2->getAccessToken());
-        conf->setValue("refresh_token" ,m_pOAuth2->getRefreshToken());
+        //conf->setValue("access_token" , m_pOAuth2->getAccessToken());
+        //conf->setValue("refresh_token" ,m_pOAuth2->getRefreshToken());
     }
   /*  qDebug() << "in dialog:" << conf->value("refresh_token").toString();
     qDebug() << "isvalid: " << m_pOAuth2->isTokenValid();
@@ -43,7 +43,17 @@ void Dialog::slotLoginDone()
     qDebug() << "m_pOAuth2->getat(): " << m_pOAuth2->getAccessToken();
     qDebug() << "m_pOAuth2->getrt(): " << m_pOAuth2->getRefreshToken();
     */
+    //gTaskHelper *th = new gTaskHelper(qnam);
+    connect(m_pOAuth2, SIGNAL(AccessTokenArrived(QString)) , this, SLOT(slotTokenObtained(QString)) );
+    m_pOAuth2->getAccessToken();
+    //th->setAccessToken(m_pOAuth2->getAccessToken());
+    //th->getTaskLists();
+}
+
+void Dialog::slotTokenObtained(QString at)
+{
+    qDebug() << "updated token is: " << at;
     gTaskHelper *th = new gTaskHelper(qnam);
-    th->setAccessToken(m_pOAuth2->getAccessToken());
+    th->setAccessToken(at);
     th->getTaskLists();
 }

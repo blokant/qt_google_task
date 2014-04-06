@@ -57,5 +57,5 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
     qDebug() << "processTaskListsReply();";
     QByteArray ba = r->readAll();
-    qDebug() << ba;
+    qDebug() <<"tasklist: " << ba;
 }
