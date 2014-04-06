@@ -40,7 +40,6 @@ OAuth2::OAuth2(QWidget* parent, QNetworkAccessManager *qnam)
     m_strAppName = "test_app_name"; //Your application name here
     m_pLoginDialog = new LoginDialog(parent);
     m_pParent = parent;
-  //  connect(m_pLoginDialog, SIGNAL(accessTokenObtained()), this, SLOT(accessTokenObtained()));
     connect(m_pLoginDialog, SIGNAL(accessCodeObtained()) , this, SLOT(slotAccessCodeObtained()) );
     conf = new QSettings("MegawarpSoftware", "goauth");
     this->qnam = qnam;
@@ -71,8 +70,6 @@ void OAuth2::setAppName(const QString& appName)
     m_strAppName = appName;
 }
 
-
-
 QString OAuth2::loginUrl()
 {
     QString str = QString("%1?client_id=%2&redirect_uri=%3&response_type=%4&scope=%5").arg(m_strEndPoint).arg(m_strClientID).
@@ -91,16 +88,12 @@ void OAuth2::getAccessToken()
 {
     if(isTokenValid())
     {
-        //return conf->value("access_token").toString();
-        //should be emit
         emit AccessTokenArrived(conf->value("access_token").toString());
     }
     else
     {
-        qDebug()  << "QString OAuth2::getAccessToken() : " << "isNotValid() starting to refresh";
+    //    qDebug()  << "QString OAuth2::getAccessToken() : " << "isNotValid() starting to refresh";
         refreshAccessToken();
-        //return conf->value("access_token").toString();
-        //emit
     }
 }
 
@@ -116,8 +109,6 @@ bool OAuth2::isAuthorized()
 
 void OAuth2::startLogin(bool bForce)
 {
-
-  //  QSettings settings(m_strCompanyName, m_strAppName);
     QString str = conf->value("access_token", "").toString();
     if(m_strClientID == "YOUR_CLIENT_ID_HERE" || m_strRedirectURI == "YOUR_REDIRECT_URI_HERE")
     {
@@ -131,7 +122,6 @@ void OAuth2::startLogin(bool bForce)
     {
         m_pLoginDialog->setLoginUrl(loginUrl());
         m_pLoginDialog->show();
-        //m_pLoginDialog->setModal(false);
     }
     else
     {
@@ -142,18 +132,13 @@ void OAuth2::startLogin(bool bForce)
 
 void OAuth2::accessTokenObtained()
 {
-   // QSettings settings(m_strCompanyName, m_strAppName);
     m_strAccessToken = m_pLoginDialog->accessToken();
-   // settings.setValue("access_token", m_strAccessToken);
     emit loginDone();
-
 }
 
 void OAuth2::slotAccessCodeObtained()
 {
-  //  qDebug() << "code obtained and it's : " << m_pLoginDialog->accessCode();
     m_strAccessCode = m_pLoginDialog->accessCode();
-   // qDebug() << "token String: " << tokenUrl();
     m_pLoginDialog->setLoginUrl(tokenUrl());
     m_pLoginDialog->show();
     obtainAccessToken();
@@ -185,12 +170,12 @@ void OAuth2::obtainAccessToken()
     connect(nwam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
 }
 
-void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
+void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token (may be combine two process.. funcs later
 {
-    qDebug() << "slotProcessPostReply()";
+   // qDebug() << "slotProcessPostReply()";
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
     QString json = r->readAll();
-    qDebug() << "reply: " << json;
+    r->deleteLater();
     if(json.contains("token") == false)
     {
         qDebug() << "json does not contain token info in slotProcessPostReply();";
@@ -200,9 +185,6 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
     JsonObject result = QtJson::parse(json, ok).toMap();
     if (ok)
     {
-    //    qDebug() << "token: " << result["access_token"].toString();
-     //   qDebug() << "refresh_toke: " << result["refresh_token"].toString();
-
         QString at = result["access_token"].toString();
         if(at.isEmpty())
         {
@@ -224,12 +206,6 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
         {
             qDebug() << "Error: empty refresh token" ;
         }
-
-        //QDateTime dt();
-        //dt.currentDateTime().toString()
-
-        //conf->setValue("token",result["access_token"].toString());
-  //      emit AccessTokenArrived(conf->value("access_token").toString());
         emit loginDone();
         //if(m_pLoginDialog->isActiveWindow())
             m_pLoginDialog->close();
@@ -238,19 +214,14 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token
     {
         qDebug() << "can not parse json reply";
     }
-
-  //  disconnect(this, SLOT(slotProcessPostReply(QNetworkReply*)) );
 }
 
 void OAuth2::slotProcessRefreshedToken(QNetworkReply *r)
 {
-    qDebug() << "slotProcessRefreshedToken();";
-    //disconnect(this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
-    //qnam->blockSignals(true);
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
     QString json = r->readAll();
     r->deleteLater();
-    qDebug() << "reply: " << json;
+    //qDebug() << "reply: " << json;
     if(json.contains("token") == false)
     {
         qDebug() << "json does not contain token info";
@@ -260,9 +231,6 @@ void OAuth2::slotProcessRefreshedToken(QNetworkReply *r)
     JsonObject result = QtJson::parse(json, ok).toMap();
     if (ok)
     {
-    //    qDebug() << "token: " << result["access_token"].toString();
-     //   qDebug() << "refresh_toke: " << result["refresh_token"].toString();
-
         QString at = result["access_token"].toString();
         if(at.isEmpty())
         {
@@ -275,23 +243,15 @@ void OAuth2::slotProcessRefreshedToken(QNetworkReply *r)
             conf->setValue("token_obtained",QDateTime::currentDateTime().toString());
         }
         emit AccessTokenArrived(conf->value("access_token").toString());
-       // emit loginDone();
-        //if(m_pLoginDialog->isActiveWindow())
-         //   m_pLoginDialog->close();
     }
     else
     {
         qDebug() << "can not parse json reply";
     }
-   // r->deleteLater();
-
 }
 
 void OAuth2::refreshAccessToken()
 {
-    //m_pLoginDialog->clearWebView();
-
-    qDebug() << "refreshAccessToken()";
     if(m_strTokenAddress.isEmpty())
     {
         qDebug() << "token adress should be set by setTokenAdress()";
@@ -306,24 +266,16 @@ void OAuth2::refreshAccessToken()
     params.addQueryItem("grant_type","refresh_token");
     params.addQueryItem("refresh_token",  conf->value("refresh_token").toString() );
     params.addQueryItem("client_id",m_strClientID);
-
-
-  //  qDebug() << "refresh token in params: " <<->get(*request,data); m_strRefreshToken;
     data.append(params.encodedQuery());
-    //data.remove(0,1);
     nwam->post(*request,data);
-    qDebug() << "data: " << data;
+    //qDebug() << "data: " << data;
     connect(nwam, SIGNAL(finished(QNetworkReply*))  , this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
 }
 
 bool OAuth2::isTokenValid()
 {
     QDateTime tokenObtained = QDateTime::fromString(conf->value("token_obtained").toString());
-  /*  qDebug() << "In isValid() : ";
-    qDebug() << "obtained: " << tokenObtained.toString();
-    qDebug() << "current : " << QDateTime::currentDateTime().toString();
-    qDebug() << "dif: " << tokenObtained.secsTo(QDateTime::currentDateTime()) <<  " sec";
-   */ if(tokenObtained.secsTo(QDateTime::currentDateTime()) > 3600)
+    if(tokenObtained.secsTo(QDateTime::currentDateTime()) > 3600)
         return false;
     return true;
 }
