@@ -1,6 +1,10 @@
 #include "gtaskhelper.h"
 #include <QMessageBox>
 #include <QCoreApplication>
+
+using QtJson::JsonObject;
+using QtJson::JsonArray;
+
 gTaskHelper::gTaskHelper(QObject *parent) :
     QObject(parent)
 {
@@ -25,7 +29,6 @@ void gTaskHelper::getTaskLists()
         qDebug() << "Error: access token is empty";
         return ;
     }
-
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -33,7 +36,7 @@ void gTaskHelper::getTaskLists()
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
     nwam->get(*request);
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTaskListsReply(QNetworkReply*)) );
-   }
+}
 
 void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {

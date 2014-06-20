@@ -9,6 +9,7 @@
 #include <QNetworkReply>
 #include <QByteArray>
 #include <QDebug>
+#include "qtjson/json.h"
 #include "gtasklist.h"
 class gTaskHelper : public QObject
 {
@@ -18,7 +19,7 @@ public:
     gTaskHelper(QNetworkAccessManager*);
     void setAccessToken(QString strAccessToken);
 signals:
-
+    void taskListsRetrieved(QList<gTaskList*>);
 public slots:
     void getTaskLists();
     void processTaskListsReply(QNetworkReply*);
