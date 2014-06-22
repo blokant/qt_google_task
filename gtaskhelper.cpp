@@ -42,7 +42,7 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
     //qDebug() << "processTaskListsReply();";
     QByteArray ba = r->readAll(); // may cause partial answer
-   // qDebug() <<"tasklist: " << ba;
+    qDebug() <<"tasklist: " << ba;
     QList<gTaskList*> *gtl = new QList<gTaskList*>();
     QString json = ba;
     //r->deleteLater();
@@ -54,13 +54,31 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
         return;
     }
     //QString at = result["access_token"].toString();
-    JsonArray plugins = result["items"].toList();
+    JsonArray tasklists = result["items"].toList();
     gTaskList gt;
     //gt.set
     //qDebug() << result["items"].toList().at(0).toMap()["title"].toString();
-    foreach(QVariant plugin, plugins) {
-            qDebug() << "  -" << plugin.toMap()["title"].toString();
+    foreach(QVariant tasklist, tasklists) {
+            QMap<QString,QVariant> mp = tasklist.toMap();
+            gTaskList *gt = new gTaskList();
+            gt->setTitle(mp["title"].toString());
+            gt->setId(mp["id"].toString());
+            gt->setSelfLink(mp["selfLink"].toString());
+            QString dateTimeString = mp["updated"].toString();
+            QStringList sl = dateTimeString.split("T");
+            QStringList dateStringList = sl.at(0).split("-");
+            QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
+            QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
+            QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
+            QDateTime dt(*d,*t);
+            delete(d);
+            delete(t);
+            gt->setUpdated(dt);
+            gtl->append(gt);
         }
-
-
+    /*for(int i = 0; i < gtl->size(); ++i)
+    {
+        qDebug() << "title: "<< gtl->at(i)->getTitle();
+    }
+    */
 }
