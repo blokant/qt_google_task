@@ -40,7 +40,27 @@ void gTaskHelper::getTaskLists()
 
 void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
-    qDebug() << "processTaskListsReply();";
-    QByteArray ba = r->readAll();
-    qDebug() <<"tasklist: " << ba;
+    //qDebug() << "processTaskListsReply();";
+    QByteArray ba = r->readAll(); // may cause partial answer
+   // qDebug() <<"tasklist: " << ba;
+    QList<gTaskList*> *gtl = new QList<gTaskList*>();
+    QString json = ba;
+    //r->deleteLater();
+    bool ok;
+    JsonObject result = QtJson::parse(json, ok).toMap();
+    if(false == ok)
+    {
+        qDebug() << "troubles with parsing json";
+        return;
+    }
+    //QString at = result["access_token"].toString();
+    JsonArray plugins = result["items"].toList();
+    gTaskList gt;
+    //gt.set
+    //qDebug() << result["items"].toList().at(0).toMap()["title"].toString();
+    foreach(QVariant plugin, plugins) {
+            qDebug() << "  -" << plugin.toMap()["title"].toString();
+        }
+
+
 }
