@@ -25,6 +25,7 @@ private:
 public slots:
     void slotLoginDone();
     void slotTokenObtained(QString);
+    void slotTaskListObtained(QList<gTaskList*> *lists);
 };
 
 #endif // DIALOG_H

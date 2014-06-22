@@ -20,7 +20,7 @@ public:
     gTaskHelper(QNetworkAccessManager*);
     void setAccessToken(QString strAccessToken);
 signals:
-    void taskListsRetrieved(QList<gTaskList*>);
+    void taskListsRetrieved(QList<gTaskList*>*);
 public slots:
     void getTaskLists();
     void processTaskListsReply(QNetworkReply*);

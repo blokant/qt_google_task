@@ -42,7 +42,7 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
     //qDebug() << "processTaskListsReply();";
     QByteArray ba = r->readAll(); // may cause partial answer
-    qDebug() <<"tasklist: " << ba;
+    //qDebug() <<"tasklist: " << ba;
     QList<gTaskList*> *gtl = new QList<gTaskList*>();
     QString json = ba;
     //r->deleteLater();
@@ -81,4 +81,5 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
         qDebug() << "title: "<< gtl->at(i)->getTitle();
     }
     */
+    emit taskListsRetrieved(gtl);
 }

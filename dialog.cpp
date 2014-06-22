@@ -52,8 +52,22 @@ void Dialog::slotLoginDone()
 
 void Dialog::slotTokenObtained(QString at)
 {
-    qDebug() << "updated token is: " << at;
+    //qDebug() << "updated token is: " << at;
     gTaskHelper *th = new gTaskHelper(qnam);
     th->setAccessToken(at);
     th->getTaskLists();
+    connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)), this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
+}
+
+void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
+{
+    for(int i = 0; i < lists->size(); ++i)
+    {
+        qDebug() << "---";
+        qDebug() << "id: " << lists->at(i)->getId();
+        qDebug() << "title: " << lists->at(i)->getTitle();
+        qDebug() << "selflink: " << lists->at(i)->getSelfLing();
+        qDebug() << "updated: " << lists->at(i)->getUpdated();
+        qDebug() << "---";
+    }
 }
