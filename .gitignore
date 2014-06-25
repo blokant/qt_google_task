@@ -2,3 +2,4 @@
 moc*
 *.autosave
 test_oauth
+*.user

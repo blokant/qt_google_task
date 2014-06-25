@@ -40,12 +40,9 @@ void gTaskHelper::getTaskLists()
 
 void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
-    //qDebug() << "processTaskListsReply();";
     QByteArray ba = r->readAll(); // may cause partial answer
-    //qDebug() <<"tasklist: " << ba;
     QList<gTaskList*> *gtl = new QList<gTaskList*>();
     QString json = ba;
-    //r->deleteLater();
     bool ok;
     JsonObject result = QtJson::parse(json, ok).toMap();
     if(false == ok)
@@ -53,11 +50,7 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
         qDebug() << "troubles with parsing json";
         return;
     }
-    //QString at = result["access_token"].toString();
     JsonArray tasklists = result["items"].toList();
-    gTaskList gt;
-    //gt.set
-    //qDebug() << result["items"].toList().at(0).toMap()["title"].toString();
     foreach(QVariant tasklist, tasklists) {
             QMap<QString,QVariant> mp = tasklist.toMap();
             gTaskList *gt = new gTaskList();
@@ -76,10 +69,6 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
             gt->setUpdated(dt);
             gtl->append(gt);
         }
-    /*for(int i = 0; i < gtl->size(); ++i)
-    {
-        qDebug() << "title: "<< gtl->at(i)->getTitle();
-    }
-    */
+    r->deleteLater();
     emit taskListsRetrieved(gtl);
 }
