@@ -25,8 +25,10 @@ public slots:
     void getTaskLists();
     void getTasksOfList(QString);
     void processTaskListsReply(QNetworkReply*);
+    void processTasksOfListReply(QNetworkReply*);
 private:
     QString listUrl;
+    QString tasksAPIUrl;
     QString accessToken;
     QNetworkAccessManager *qnam;
 };

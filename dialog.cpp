@@ -55,7 +55,8 @@ void Dialog::slotTokenObtained(QString at)
     //qDebug() << "updated token is: " << at;
     gTaskHelper *th = new gTaskHelper(qnam);
     th->setAccessToken(at);
-    th->getTaskLists();
+    //th->getTaskLists();
+    th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
     connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)), this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
 }
 

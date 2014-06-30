@@ -9,11 +9,13 @@ gTaskHelper::gTaskHelper(QObject *parent) :
     QObject(parent)
 {
     listUrl = "https://www.googleapis.com/tasks/v1/users/@me/lists";
+    tasksAPIUrl = "https://www.googleapis.com/tasks/v1/";
 }
 
 gTaskHelper::gTaskHelper(QNetworkAccessManager *q)
 {
     listUrl = "https://www.googleapis.com/tasks/v1/users/@me/lists";
+    tasksAPIUrl = "https://www.googleapis.com/tasks/v1/";
     qnam = q;
 }
 
@@ -37,6 +39,8 @@ void gTaskHelper::getTaskLists()
     nwam->get(*request);
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTaskListsReply(QNetworkReply*)) );
 }
+
+
 
 void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
@@ -70,5 +74,33 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
             gtl->append(gt);
         }
     r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processTaskListsReply(QNetworkReply*)) );
     emit taskListsRetrieved(gtl);
+}
+
+
+void gTaskHelper::getTasksOfList(QString listId)
+{
+    if(accessToken.isEmpty())
+    {
+        qDebug() << "Error: access token is empty";
+        return ;
+    }
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/"));
+    qDebug() << "url: " << tasksAPIUrl + "lists/" + listId + "/tasks/";
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    nwam->get(*request);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTasksOfListReply(QNetworkReply*)) );
+}
+
+void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
+{
+    qDebug() << "processTasksOfListReply";
+    qDebug() << "data: ";
+    qDebug() << r->readAll();
+    r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processTasksOfListReply(QNetworkReply*)) );
 }
