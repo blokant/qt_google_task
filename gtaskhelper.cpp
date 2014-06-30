@@ -1,7 +1,7 @@
 #include "gtaskhelper.h"
 #include <QMessageBox>
 #include <QCoreApplication>
-
+#include <QTextCodec>
 using QtJson::JsonObject;
 using QtJson::JsonArray;
 
@@ -88,7 +88,6 @@ void gTaskHelper::getTasksOfList(QString listId)
     }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/"));
-    qDebug() << "url: " << tasksAPIUrl + "lists/" + listId + "/tasks/";
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QString at = "Bearer " + accessToken;
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
@@ -98,9 +97,43 @@ void gTaskHelper::getTasksOfList(QString listId)
 
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
-    qDebug() << "processTasksOfListReply";
-    qDebug() << "data: ";
-    qDebug() << r->readAll();
+    QByteArray ba = r->readAll(); // may cause partial answer
+    QList<gTask*> *gTaskList = new QList<gTask*>();
+    QString json = ba;
+    bool ok;
+    JsonObject result = QtJson::parse(json, ok).toMap();
+    if(false == ok)
+    {
+        qDebug() << "troubles with parsing json";
+        return;
+    }
+    JsonArray tasklists = result["items"].toList();
+    foreach(QVariant gtask, tasklists) {
+            QMap<QString,QVariant> mp = gtask.toMap();
+            gTask *task = new gTask();
+            task->setTitle(QString::fromUtf8((char*)mp["title"].data()) );
+            task->setId(mp["id"].toString());
+            task->setStatus(mp["status"].toString());
+            task->setPosition(mp["position"].toString());
+           /* QString dateTimeString = mp["updated"].toString();
+            QStringList sl = dateTimeString.split("T");
+            QStringList dateStringList = sl.at(0).split("-");
+            QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
+            QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
+            QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
+            QDateTime dt(*d,*t);
+            delete(d);
+            delete(t);
+            */
+            QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+                QTextCodec::setCodecForCStrings(codec);
+
+            QString s = mp["title"].toString() ;
+            qDebug() << "taskTitle: " << s;
+           // gt->setUpdated(dt);
+           // gtl->append(gt);
+        }
+
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processTasksOfListReply(QNetworkReply*)) );
 }

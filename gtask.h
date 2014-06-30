@@ -28,6 +28,7 @@ public slots:
     QDateTime getDueTo(){return due;}
     QDateTime getUpdated(){return updated;}
     void setTitle(QString newTitle){title = newTitle;}
+    void setId(QString newId){ id = newId;}
     void setNotes(QString newNotes){notes = newNotes;}
     void setPosition(QString newPosition){position = newPosition;}
     void setParentTask(QString ParentId){parentTask = ParentId;}
