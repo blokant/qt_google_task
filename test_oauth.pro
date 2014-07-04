@@ -16,7 +16,6 @@ SOURCES += main.cpp\
         dialog.cpp \
     oauth2.cpp \
     logindialog.cpp \
-    qtjson/json.cpp \
     gtask.cpp \
     gtasklist.cpp \
     gtaskhelper.cpp
@@ -24,9 +23,9 @@ SOURCES += main.cpp\
 HEADERS  += dialog.h \
     oauth2.h \
     logindialog.h \
-    qtjson/json.h \
     gtask.h \
     gtasklist.h \
     gtaskhelper.h
 
 FORMS    += dialog.ui
+LIBS += -L/usr/local/lib -lqjson

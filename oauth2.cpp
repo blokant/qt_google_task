@@ -5,8 +5,6 @@
 #include <QSettings>
 #include <QMessageBox>
 
-using QtJson::JsonObject;
-using QtJson::JsonArray;
 
 OAuth2::OAuth2(QWidget* parent)
 {
@@ -174,15 +172,17 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token (may be com
 {
    // qDebug() << "slotProcessPostReply()";
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
-    QString json = r->readAll();
+    QByteArray ba = r->readAll();
     r->deleteLater();
-    if(json.contains("token") == false)
+    if(ba.contains("token") == false)
     {
         qDebug() << "json does not contain token info in slotProcessPostReply();";
         return;
     }
     bool ok;
-    JsonObject result = QtJson::parse(json, ok).toMap();
+    QJson::Parser parser;
+    QVariantMap result = parser.parse (ba, &ok).toMap();
+
     if (ok)
     {
         QString at = result["access_token"].toString();
@@ -219,16 +219,17 @@ void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token (may be com
 void OAuth2::slotProcessRefreshedToken(QNetworkReply *r)
 {
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
-    QString json = r->readAll();
+    QByteArray ba = r->readAll();
     r->deleteLater();
     //qDebug() << "reply: " << json;
-    if(json.contains("token") == false)
+    if(ba.contains("token") == false)
     {
         qDebug() << "json does not contain token info";
         return;
     }
     bool ok;
-    JsonObject result = QtJson::parse(json, ok).toMap();
+    QJson::Parser parser;
+    QVariantMap result = parser.parse (ba, &ok).toMap();
     if (ok)
     {
         QString at = result["access_token"].toString();

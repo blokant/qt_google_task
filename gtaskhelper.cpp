@@ -2,8 +2,6 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 #include <QTextCodec>
-using QtJson::JsonObject;
-using QtJson::JsonArray;
 
 gTaskHelper::gTaskHelper(QObject *parent) :
     QObject(parent)
@@ -46,15 +44,17 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
     QList<gTaskList*> *gtl = new QList<gTaskList*>();
-    QString json = ba;
+    //QString json = ba;
     bool ok;
-    JsonObject result = QtJson::parse(json, ok).toMap();
-    if(false == ok)
-    {
-        qDebug() << "troubles with parsing json";
-        return;
+    //JsonObject result = QtJson::parse(json, ok).toMap();
+    QJson::Parser parser;
+
+    QVariantMap result = parser.parse (ba, &ok).toMap();
+    if (!ok) {
+      qFatal("An error occurred during parsing");
+      return;
     }
-    JsonArray tasklists = result["items"].toList();
+    QList<QVariant> tasklists = result["items"].toList();
     foreach(QVariant tasklist, tasklists) {
             QMap<QString,QVariant> mp = tasklist.toMap();
             gTaskList *gt = new gTaskList();
@@ -72,6 +72,7 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
             delete(t);
             gt->setUpdated(dt);
             gtl->append(gt);
+            qDebug() << gt;
         }
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processTaskListsReply(QNetworkReply*)) );
@@ -97,7 +98,7 @@ void gTaskHelper::getTasksOfList(QString listId)
 
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
-    QByteArray ba = r->readAll(); // may cause partial answer
+   /* QByteArray ba = r->readAll(); // may cause partial answer
     QList<gTask*> *gTaskList = new QList<gTask*>();
     QString json = ba;
     bool ok;
@@ -115,6 +116,7 @@ void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
             task->setId(mp["id"].toString());
             task->setStatus(mp["status"].toString());
             task->setPosition(mp["position"].toString());
+            */
            /* QString dateTimeString = mp["updated"].toString();
             QStringList sl = dateTimeString.split("T");
             QStringList dateStringList = sl.at(0).split("-");
@@ -124,8 +126,8 @@ void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
             QDateTime dt(*d,*t);
             delete(d);
             delete(t);
-            */
-            QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+            */  // this was commented
+       /*     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
                 QTextCodec::setCodecForCStrings(codec);
 
             QString s = mp["title"].toString() ;
@@ -136,4 +138,5 @@ void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processTasksOfListReply(QNetworkReply*)) );
+    */
 }

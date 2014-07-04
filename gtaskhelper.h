@@ -10,9 +10,9 @@
 #include <QNetworkReply>
 #include <QByteArray>
 #include <QDebug>
-#include "qtjson/json.h"
 #include "gtasklist.h"
 #include "gtask.h"
+#include <qjson/parser.h>
 class gTaskHelper : public QObject
 {
     Q_OBJECT

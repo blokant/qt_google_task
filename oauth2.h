@@ -9,7 +9,8 @@
 #include <QByteArray>
 #include <QSettings>
 #include <QDateTime>
-#include "qtjson/json.h"
+#include <qjson/parser.h>
+//#include "qtjson/json.h"
 class LoginDialog;
 
 class OAuth2 : public QObject
