@@ -22,6 +22,7 @@ public:
     void setAccessToken(QString strAccessToken);
 signals:
     void taskListsRetrieved(QList<gTaskList*>*);
+    void tasksOfListRetrieved(QList<gTask*>*);
 public slots:
     void getTaskLists();
     void getTasksOfList(QString);

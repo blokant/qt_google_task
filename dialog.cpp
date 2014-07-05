@@ -55,10 +55,10 @@ void Dialog::slotTokenObtained(QString at)
     //qDebug() << "updated token is: " << at;
     gTaskHelper *th = new gTaskHelper(qnam);
     th->setAccessToken(at);
-    th->getTaskLists();
-    //th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
-
-    connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)), this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
+    //th->getTaskLists();
+    th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
+    connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
+    //connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)), this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
 }
 
 void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
@@ -71,5 +71,17 @@ void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
         qDebug() << "selflink: " << lists->at(i)->getSelfLing();
         qDebug() << "updated: " << lists->at(i)->getUpdated();
         qDebug() << "---";
+    }
+}
+
+void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
+{
+    for(int i = 0; i < tasks->size(); i++)
+    {
+        qDebug() << "task " + QString::number(i);
+        qDebug() << "title: " << tasks->at(i)->getTitle();
+        qDebug() << "due: " << tasks->at(i)->getDueTo().toString();
+        qDebug() << "id: " << tasks->at(i)->getId();
+        qDebug() << "status: " << tasks->at(i)->getStatus();
     }
 }
