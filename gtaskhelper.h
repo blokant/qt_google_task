@@ -23,7 +23,7 @@ public:
 signals:
     void taskListsRetrieved(QList<gTaskList*>*);
     void tasksOfListRetrieved(QList<gTask*>*);
-    void taskListInserted();
+    void taskListInserted(gTaskList*);
     void taskListNotInserted();
 public slots:
     void getTaskLists();

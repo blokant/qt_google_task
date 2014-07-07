@@ -63,7 +63,7 @@ void Dialog::slotTokenObtained(QString at)
     th->setAccessToken(at);
     //th->insertTaskList(QString::fromUtf8("Привет") );
     th->insertTaskList("привет");
-    connect(th,SIGNAL(taskListInserted()) , this , SLOT(slotTaskListInserted()) );
+    connect(th,SIGNAL(taskListInserted(gTaskList*)) , this , SLOT(slotTaskListInserted(gTaskList*)) );
     //th->insertTaskList("мир21 Innovation_");
     //th->getTaskLists();
     //th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
@@ -96,7 +96,9 @@ void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
     }
 }
 
-void Dialog::slotTaskListInserted()
+void Dialog::slotTaskListInserted(gTaskList *gtl)
 {
-    qDebug() << "slotTaskListInserted();";
+    qDebug() << "slotTaskListInserted(gtl);";
+    qDebug() << "title: " << gtl->getTitle();
+    qDebug() << "id: " << gtl->getId();
 }

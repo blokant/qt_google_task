@@ -158,11 +158,31 @@ void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 void gTaskHelper::processinsertTaskListReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
-    if ( ba.contains("title") && ba.contains("id") )
-        emit taskListInserted();
-    else
-        emit taskListNotInserted();
-
+    bool ok;
+    QJson::Parser parser;
+    QVariantMap result = parser.parse (ba, &ok).toMap();
+    if (!ok) {
+      qFatal("An error occurred during parsing");
+      return;
+    }
+            QMap<QString,QVariant> mp = result;
+            gTaskList *gt = new gTaskList();
+            gt->setTitle(mp["title"].toString());
+            gt->setId(mp["id"].toString());
+            gt->setSelfLink(mp["selfLink"].toString());
+            QString dateTimeString = mp["updated"].toString();
+            QStringList sl = dateTimeString.split("T");
+            QStringList dateStringList = sl.at(0).split("-");
+            QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
+            QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
+            QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
+            QDateTime dt(*d,*t);
+            delete(d);
+            delete(t);
+            gt->setUpdated(dt);
+            qDebug() << gt->getId();
+            if(gt->getTitle().isEmpty() == false)
+                emit taskListInserted(gt);
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processinsertTaskListReply(QNetworkReply*)) );
 }
