@@ -53,6 +53,7 @@ void gTaskHelper::insertTaskList(QString listName)
     QString s = "{\n\"title\": \"" + listName + "\" \n}";
     QByteArray data = s.toUtf8();//(char*)s.data();
     nwam->post(*request,data);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processinsertTaskListReply(QNetworkReply*)) );
 }
 
 
@@ -152,4 +153,16 @@ void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processTasksOfListReply(QNetworkReply*)) );
     emit tasksOfListRetrieved(gTaskList);
+}
+
+void gTaskHelper::processinsertTaskListReply(QNetworkReply *r)
+{
+    QByteArray ba = r->readAll(); // may cause partial answer
+    if ( ba.contains("title") && ba.contains("id") )
+        emit taskListInserted();
+    else
+        emit taskListNotInserted();
+
+    r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processinsertTaskListReply(QNetworkReply*)) );
 }
