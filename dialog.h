@@ -29,6 +29,7 @@ public slots:
     void slotTasksOfListObtained(QList<gTask*> *tasks);
     void slotTaskListInserted(gTaskList*);
     void slotTaskListDeleted();
+    void slotTaskListNotDeleted();
 };
 
 #endif // DIALOG_H

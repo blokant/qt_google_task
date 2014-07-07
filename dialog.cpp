@@ -64,8 +64,9 @@ void Dialog::slotTokenObtained(QString at)
     //th->insertTaskList(QString::fromUtf8("Привет") );
     //th->insertTaskList("привет");
     //connect(th,SIGNAL(taskListInserted(gTaskList*)) , this , SLOT(slotTaskListInserted(gTaskList*)) );
-    th->deleteTaskList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6OTI4ODY4NTUyOjA");
-    connect(th, SIGNAL(taskListDeleted()) , this , SLOT(slotTaskListDeleted()) );
+    //th->deleteTaskList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6NzA0NzIxNjAwOjA");
+    //connect(th, SIGNAL(taskListDeleted()) , this , SLOT(slotTaskListDeleted()) );
+    //connect(th, SIGNAL(taskListNotDeleted()) , this, SLOT(slotTaskListNotDeleted()) );
     //th->insertTaskList("мир21 Innovation_");
     //th->getTaskLists();
     //th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
@@ -108,4 +109,9 @@ void Dialog::slotTaskListInserted(gTaskList *gtl)
 void Dialog::slotTaskListDeleted()
 {
     qDebug() << "slotTaskListDeleted();";
+}
+
+void Dialog::slotTaskListNotDeleted()
+{
+    qDebug() << "slotTaskListNotDeleted();";
 }
