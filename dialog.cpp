@@ -1,6 +1,7 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 #include <QDebug>
+#include <QTextCodec>
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
@@ -10,6 +11,11 @@ Dialog::Dialog(QWidget *parent) :
     conf = new QSettings("MegawarpSoftware", "taskman");
     //m_pOAuth2->getAccessToken();
     //qDebug() << "Befire"
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+
+
     qnam = new QNetworkAccessManager();
     m_pOAuth2 = new OAuth2(this,qnam);
     connect(m_pOAuth2, SIGNAL(loginDone()), this, SLOT(slotLoginDone()));
@@ -55,9 +61,12 @@ void Dialog::slotTokenObtained(QString at)
     //qDebug() << "updated token is: " << at;
     gTaskHelper *th = new gTaskHelper(qnam);
     th->setAccessToken(at);
+    //th->insertTaskList(QString::fromUtf8("Привет") );
+    th->insertTaskList("привет");
+    th->insertTaskList("мир21 Innovation_");
     //th->getTaskLists();
-    th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
-    connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
+    //th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
+    //connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
     //connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)), this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
 }
 

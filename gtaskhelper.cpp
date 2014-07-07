@@ -38,6 +38,23 @@ void gTaskHelper::getTaskLists()
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTaskListsReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::insertTaskList(QString listName)
+{
+    if(accessToken.isEmpty())
+    {
+        qDebug() << "Error: access token is empty";
+        return ;
+    }
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    QString s = "{\n\"title\": \"" + listName + "\" \n}";
+    QByteArray data = s.toUtf8();//(char*)s.data();
+    nwam->post(*request,data);
+}
+
 
 
 void gTaskHelper::processTaskListsReply(QNetworkReply *r)
