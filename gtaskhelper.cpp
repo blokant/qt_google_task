@@ -56,6 +56,22 @@ void gTaskHelper::insertTaskList(QString listName)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processinsertTaskListReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::deleteTaskList(QString listId)
+{
+    if(accessToken.isEmpty())
+    {
+        qDebug() << "Error: access token is empty";
+        return ;
+    }
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl + "/" + listId));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    nwam->deleteResource(*request);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processdeleteTaskListReply(QNetworkReply*)) );
+}
+
 
 
 void gTaskHelper::processTaskListsReply(QNetworkReply *r)
@@ -185,4 +201,15 @@ void gTaskHelper::processinsertTaskListReply(QNetworkReply *r)
                 emit taskListInserted(gt);
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processinsertTaskListReply(QNetworkReply*)) );
+}
+
+void gTaskHelper::processdeleteTaskListReply(QNetworkReply *r)
+{
+    QByteArray ba = r->readAll(); // may cause partial answer
+    if(ba.size() == 0)
+        emit taskListDeleted();
+    else
+        emit taskListNotDeleted();
+    r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processdeleteTaskListReply(QNetworkReply*)) );
 }
