@@ -22,6 +22,7 @@ private:
     OAuth2 *m_pOAuth2;
     QSettings *conf;
     QNetworkAccessManager *qnam;
+    gTaskHelper *th;
 public slots:
     void slotLoginDone();
     void slotTokenObtained(QString);
@@ -30,6 +31,7 @@ public slots:
     void slotTaskListInserted(gTaskList*);
     void slotTaskListDeleted();
     void slotTaskListNotDeleted();
+    void slotTaskListUpdated(gTaskList*);
 };
 
 #endif // DIALOG_H

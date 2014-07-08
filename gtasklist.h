@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <qjson/serializer.h>
+#include <QVariantMap>
 class gTaskList : public QObject
 {
     Q_OBJECT
@@ -14,8 +16,9 @@ public:
     void setUpdated(QDateTime dt){updated = dt;}
     QString getTitle(){return title;}
     QString getId(){return id;}
-    QString getSelfLing(){return selfLink;}
+    QString getSelfLink(){return selfLink;}
     QDateTime getUpdated(){return updated;}
+    QByteArray *toJson();
 
 signals:
 

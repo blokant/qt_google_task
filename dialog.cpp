@@ -18,6 +18,7 @@ Dialog::Dialog(QWidget *parent) :
 
     qnam = new QNetworkAccessManager();
     m_pOAuth2 = new OAuth2(this,qnam);
+    th = new gTaskHelper(qnam);
     connect(m_pOAuth2, SIGNAL(loginDone()), this, SLOT(slotLoginDone()));
     QString v = conf->value("refresh_token").toString();
     if(v.isEmpty())
@@ -59,7 +60,6 @@ void Dialog::slotLoginDone()
 void Dialog::slotTokenObtained(QString at)
 {
     //qDebug() << "updated token is: " << at;
-    gTaskHelper *th = new gTaskHelper(qnam);
     th->setAccessToken(at);
     //th->insertTaskList(QString::fromUtf8("Привет") );
     //th->insertTaskList("привет");
@@ -81,7 +81,7 @@ void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
         qDebug() << "---";
         qDebug() << "id: " << lists->at(i)->getId();
         qDebug() << "title: " << lists->at(i)->getTitle();
-        qDebug() << "selflink: " << lists->at(i)->getSelfLing();
+        qDebug() << "selflink: " << lists->at(i)->getSelfLink();
         qDebug() << "updated: " << lists->at(i)->getUpdated();
         qDebug() << "---";
     }
@@ -104,6 +104,9 @@ void Dialog::slotTaskListInserted(gTaskList *gtl)
     qDebug() << "slotTaskListInserted(gtl);";
     qDebug() << "title: " << gtl->getTitle();
     qDebug() << "id: " << gtl->getId();
+    //gtl->setTitle("новое название");
+    //th->updateTaskList(gtl);
+    //connect(th, SIGNAL(taskListUpdated(gTaskList*)) , this, SLOT(slotTaskListUpdated(gTaskList*)) );
 }
 
 void Dialog::slotTaskListDeleted()
@@ -114,4 +117,11 @@ void Dialog::slotTaskListDeleted()
 void Dialog::slotTaskListNotDeleted()
 {
     qDebug() << "slotTaskListNotDeleted();";
+}
+
+void Dialog::slotTaskListUpdated(gTaskList *gtl)
+{
+    qDebug() <<"slotTaskListUpdated();";
+    //make something like getGTLFromReply();
+    qDebug() << "new title: " << gtl->getTitle();
 }

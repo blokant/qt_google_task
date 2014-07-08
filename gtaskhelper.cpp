@@ -51,7 +51,7 @@ void gTaskHelper::insertTaskList(QString listName)
     QString at = "Bearer " + accessToken;
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
     QString s = "{\n\"title\": \"" + listName + "\" \n}";
-    QByteArray data = s.toUtf8();//(char*)s.data();
+    QByteArray data = s.toUtf8();
     nwam->post(*request,data);
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processinsertTaskListReply(QNetworkReply*)) );
 }
@@ -72,15 +72,31 @@ void gTaskHelper::deleteTaskList(QString listId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processdeleteTaskListReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::updateTaskList(gTaskList *gtl)
+{
+    if(accessToken.isEmpty())
+    {
+        qDebug() << "Error: access token is empty";
+        return ;
+    }
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl + "/" + gtl->getId()));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    QByteArray *ba = gtl->toJson();
+    nwam->put(*request, *ba);
+    delete(ba);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processupdateTaskListReply(QNetworkReply*)) );
+}
+
 
 
 void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
     QList<gTaskList*> *gtl = new QList<gTaskList*>();
-    //QString json = ba;
     bool ok;
-    //JsonObject result = QtJson::parse(json, ok).toMap();
     QJson::Parser parser;
 
     QVariantMap result = parser.parse (ba, &ok).toMap();
@@ -212,4 +228,37 @@ void gTaskHelper::processdeleteTaskListReply(QNetworkReply *r)
         emit taskListNotDeleted();
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processdeleteTaskListReply(QNetworkReply*)) );
+}
+
+void gTaskHelper::processupdateTaskListReply(QNetworkReply *r)
+{
+    QByteArray ba = r->readAll(); // may cause partial answer
+    bool ok;
+    QJson::Parser parser;
+    QVariantMap result = parser.parse (ba, &ok).toMap();
+    if (!ok) {
+      qFatal("An error occurred during parsing");
+      return;
+    }
+            QMap<QString,QVariant> mp = result;
+            gTaskList *gt = new gTaskList();
+            gt->setTitle(mp["title"].toString());
+            gt->setId(mp["id"].toString());
+            gt->setSelfLink(mp["selfLink"].toString());
+            QString dateTimeString = mp["updated"].toString();
+            QStringList sl = dateTimeString.split("T");
+            QStringList dateStringList = sl.at(0).split("-");
+            QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
+            QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
+            QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
+            QDateTime dt(*d,*t);
+            delete(d);
+            delete(t);
+            gt->setUpdated(dt);
+            qDebug() << gt->getId();
+            if(gt->getTitle().isEmpty() == false)
+                emit taskListUpdated(gt);
+
+    r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processupdateTaskListReply(QNetworkReply*)) );
 }

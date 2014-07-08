@@ -27,15 +27,18 @@ signals:
     void taskListNotInserted();
     void taskListDeleted();
     void taskListNotDeleted();
+    void taskListUpdated(gTaskList*);
 public slots:
     void getTaskLists();
-    void insertTaskList(QString listName);
-    void deleteTaskList(QString listId);
+    void insertTaskList(QString );
+    void deleteTaskList(QString );
+    void updateTaskList(gTaskList *);
     void getTasksOfList(QString);
     void processTaskListsReply(QNetworkReply*);
     void processTasksOfListReply(QNetworkReply*);
     void processinsertTaskListReply(QNetworkReply*);
     void processdeleteTaskListReply(QNetworkReply*);
+    void processupdateTaskListReply(QNetworkReply*);
 private:
     QString listUrl;
     QString tasksAPIUrl;
