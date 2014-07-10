@@ -123,22 +123,8 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
     QList<QVariant> tasklists = result["items"].toList();
     foreach(QVariant tasklist, tasklists) {
             QMap<QString,QVariant> mp = tasklist.toMap();
-            gTaskList *gt = new gTaskList();
-            gt->setTitle(mp["title"].toString());
-            gt->setId(mp["id"].toString());
-            gt->setSelfLink(mp["selfLink"].toString());
-            QString dateTimeString = mp["updated"].toString();
-            QStringList sl = dateTimeString.split("T");
-            QStringList dateStringList = sl.at(0).split("-");
-            QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
-            QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
-            QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
-            QDateTime dt(*d,*t);
-            delete(d);
-            delete(t);
-            gt->setUpdated(dt);
+            gTaskList *gt = getTaskListFromMap(&mp);
             gtl->append(gt);
-            qDebug() << gt;
         }
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processTaskListsReply(QNetworkReply*)) );
@@ -178,23 +164,7 @@ void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
     QList<QVariant> tasklists = result["items"].toList();
     foreach(QVariant gtask, tasklists) {
             QMap<QString,QVariant> mp = gtask.toMap();
-            gTask *task = new gTask();
-            task->setTitle(mp["title"].toString() );
-            task->setId(mp["id"].toString());
-            task->setStatus(mp["status"].toString());
-            task->setPosition(mp["position"].toString());
-
-            QString dateTimeString = mp["updated"].toString();
-            QStringList sl = dateTimeString.split("T");
-            QStringList dateStringList = sl.at(0).split("-");
-            QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
-            QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
-            QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
-            QDateTime dt(*d,*t);
-            task->setDue(dt);
-            delete(d);
-            delete(t);
-            task->setUpdated(dt);
+            gTask *task = getTaskFromMap(&mp);
             gTaskList->append(task);
         }
 
@@ -255,20 +225,47 @@ gTaskList *gTaskHelper::getTaskListFromByteArray(QByteArray *ba) // some kinf of
       qFatal("An error occurred during parsing");
       return 0;
     }
-            QMap<QString,QVariant> mp = result;
-            gTaskList *gt = new gTaskList();
-            gt->setTitle(mp["title"].toString());
-            gt->setId(mp["id"].toString());
-            gt->setSelfLink(mp["selfLink"].toString());
-            QString dateTimeString = mp["updated"].toString();
-            QStringList sl = dateTimeString.split("T");
-            QStringList dateStringList = sl.at(0).split("-");
-            QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
-            QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
-            QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
-            QDateTime dt(*d,*t);
-            delete(d);
-            delete(t);
-            gt->setUpdated(dt);
+    QMap<QString,QVariant> mp = result;
+    return getTaskListFromMap(&mp);
+}
+
+gTaskList *gTaskHelper::getTaskListFromMap(QVariantMap *mp)
+{
+    gTaskList *gt = new gTaskList();
+    gt->setTitle((*mp)["title"].toString());
+    gt->setId((*mp)["id"].toString());
+    gt->setSelfLink((*mp)["selfLink"].toString());
+    QString dateTimeString = (*mp)["updated"].toString();
+    QStringList sl = dateTimeString.split("T");
+    QStringList dateStringList = sl.at(0).split("-");
+    QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
+    QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
+    QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
+    QDateTime dt(*d,*t);
+    delete(d);
+    delete(t);
+    gt->setUpdated(dt);
     return gt;
+}
+
+gTask *gTaskHelper::getTaskFromMap(QVariantMap *mp)
+{
+    gTask *task = new gTask();
+    task->setTitle((*mp)["title"].toString() );
+    task->setId((*mp)["id"].toString());
+    task->setStatus((*mp)["status"].toString());
+    task->setPosition((*mp)["position"].toString());
+
+    QString dateTimeString = (*mp)["updated"].toString();
+    QStringList sl = dateTimeString.split("T");
+    QStringList dateStringList = sl.at(0).split("-");
+    QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
+    QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
+    QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
+    QDateTime dt(*d,*t);
+    task->setDue(dt);
+    delete(d);
+    delete(t);
+    task->setUpdated(dt);
+    return task;
 }

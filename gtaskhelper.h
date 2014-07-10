@@ -44,6 +44,8 @@ public slots:
     void processgetTaskListReply(QNetworkReply*);
 private slots:
     gTaskList* getTaskListFromByteArray(QByteArray *ba);
+    gTaskList* getTaskListFromMap(QVariantMap *m);
+    gTask*     getTaskFromMap(QVariantMap*);
 private:
     QString listUrl;
     QString tasksAPIUrl;
