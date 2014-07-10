@@ -61,6 +61,8 @@ void Dialog::slotTokenObtained(QString at)
 {
     //qDebug() << "updated token is: " << at;
     th->setAccessToken(at);
+    th->getTaskList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MTE0ODUyNDk6MA");
+    connect(th, SIGNAL(taskListRetrieved(gTaskList*)) , this, SLOT(slotTaskListRetrieved(gTaskList*)) );
     //th->insertTaskList(QString::fromUtf8("Привет") );
     //th->insertTaskList("привет");
     //connect(th,SIGNAL(taskListInserted(gTaskList*)) , this , SLOT(slotTaskListInserted(gTaskList*)) );
@@ -124,4 +126,9 @@ void Dialog::slotTaskListUpdated(gTaskList *gtl)
     qDebug() <<"slotTaskListUpdated();";
     //make something like getGTLFromReply();
     qDebug() << "new title: " << gtl->getTitle();
+}
+
+void Dialog::slotTaskListRetrieved(gTaskList *gtl)
+{
+    qDebug() << "title:" << gtl->getTitle();
 }

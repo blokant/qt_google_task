@@ -28,8 +28,10 @@ signals:
     void taskListDeleted();
     void taskListNotDeleted();
     void taskListUpdated(gTaskList*);
+    void taskListRetrieved(gTaskList*);
 public slots:
     void getTaskLists();
+    void getTaskList(QString listId);
     void insertTaskList(QString );
     void deleteTaskList(QString );
     void updateTaskList(gTaskList *);
@@ -39,6 +41,7 @@ public slots:
     void processinsertTaskListReply(QNetworkReply*);
     void processdeleteTaskListReply(QNetworkReply*);
     void processupdateTaskListReply(QNetworkReply*);
+    void processgetTaskListReply(QNetworkReply*);
 private:
     QString listUrl;
     QString tasksAPIUrl;
