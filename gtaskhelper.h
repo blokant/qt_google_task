@@ -42,6 +42,8 @@ public slots:
     void processdeleteTaskListReply(QNetworkReply*);
     void processupdateTaskListReply(QNetworkReply*);
     void processgetTaskListReply(QNetworkReply*);
+private slots:
+    gTaskList* getTaskListFromByteArray(QByteArray *ba);
 private:
     QString listUrl;
     QString tasksAPIUrl;
