@@ -22,29 +22,37 @@ public:
     void setAccessToken(QString strAccessToken);
 signals:
     void taskListsRetrieved(QList<gTaskList*>*);
-    void tasksOfListRetrieved(QList<gTask*>*);
     void taskListInserted(gTaskList*);
     void taskListNotInserted();
     void taskListDeleted();
     void taskListNotDeleted();
     void taskListUpdated(gTaskList*);
     void taskListRetrieved(gTaskList*);
+    //tasks
+    void tasksOfListRetrieved(QList<gTask*>*);
+    void taskRetrieved(gTask*);
 public slots:
     void getTaskLists();
     void getTaskList(QString listId);
     void insertTaskList(QString );
     void deleteTaskList(QString );
     void updateTaskList(gTaskList *);
-    void getTasksOfList(QString);
+    //all the process* should be private
     void processTaskListsReply(QNetworkReply*);
-    void processTasksOfListReply(QNetworkReply*);
     void processinsertTaskListReply(QNetworkReply*);
     void processdeleteTaskListReply(QNetworkReply*);
     void processupdateTaskListReply(QNetworkReply*);
     void processgetTaskListReply(QNetworkReply*);
+    //tasks
+    void getTasksOfList(QString);
+    void getTask(QString listId,QString taskId);
+    void processTasksOfListReply(QNetworkReply*);
+    void processgetTaskReply(QNetworkReply*);
+
 private slots:
     gTaskList* getTaskListFromByteArray(QByteArray *ba);
     gTaskList* getTaskListFromMap(QVariantMap *m);
+    gTask*     getTaskFromByteArray(QByteArray*);
     gTask*     getTaskFromMap(QVariantMap*);
 private:
     QString listUrl;

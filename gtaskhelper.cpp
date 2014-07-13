@@ -148,6 +148,22 @@ void gTaskHelper::getTasksOfList(QString listId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTasksOfListReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::getTask(QString listId, QString taskId)
+{
+    if(accessToken.isEmpty())
+    {
+        qDebug() << "Error: access token is empty";
+        return ;
+    }
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/" + taskId));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    nwam->get(*request);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processgetTaskReply(QNetworkReply*)) );
+}
+
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
@@ -171,6 +187,16 @@ void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processTasksOfListReply(QNetworkReply*)) );
     emit tasksOfListRetrieved(gTaskList);
+}
+
+void gTaskHelper::processgetTaskReply(QNetworkReply *r)
+{
+    QByteArray ba = r->readAll(); // may cause partial answer
+    gTask* gt = getTaskFromByteArray(&ba);
+    if(gt->getTitle().isEmpty() == false)
+                emit taskRetrieved(gt);
+    r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processgetTaskReply(QNetworkReply*)) );
 }
 
 void gTaskHelper::processinsertTaskListReply(QNetworkReply *r)
@@ -246,6 +272,19 @@ gTaskList *gTaskHelper::getTaskListFromMap(QVariantMap *mp)
     delete(t);
     gt->setUpdated(dt);
     return gt;
+}
+
+gTask *gTaskHelper::getTaskFromByteArray(QByteArray *ba)
+{
+    bool ok;
+    QJson::Parser parser;
+    QVariantMap result = parser.parse (*ba, &ok).toMap();
+    if (!ok) {
+      qFatal("An error occurred during parsing");
+      return 0;
+    }
+    QMap<QString,QVariant> mp = result;
+    return getTaskFromMap(&mp);
 }
 
 gTask *gTaskHelper::getTaskFromMap(QVariantMap *mp)
