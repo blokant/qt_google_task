@@ -33,6 +33,7 @@ public slots:
     void slotTaskListNotDeleted();
     void slotTaskListUpdated(gTaskList*);
     void slotTaskListRetrieved(gTaskList*);
+    void slotTaskListIdRetrieved(QString);
     //tasks
     void slotTaskRetrieved(gTask*);
     void slotTaskInserted(gTask*);

@@ -28,13 +28,16 @@ signals:
     void taskListNotDeleted();
     void taskListUpdated(gTaskList*);
     void taskListRetrieved(gTaskList*);
+    void taskListIdRetrieved(QString);
     //tasks
     void tasksOfListRetrieved(QList<gTask*>*);
     void taskRetrieved(gTask*);
     void taskInserted(gTask*);
+
 public slots:
     void getTaskLists();
     void getTaskList(QString listId);
+    void getTaskListId(QString listName);
     void insertTaskList(QString );
     void deleteTaskList(QString );
     void updateTaskList(gTaskList *);
@@ -44,6 +47,7 @@ public slots:
     void processdeleteTaskListReply(QNetworkReply*);
     void processupdateTaskListReply(QNetworkReply*);
     void processgetTaskListReply(QNetworkReply*);
+    void processgetTaskListId(QList<gTaskList *> *tls);
     //tasks
     void getTasksOfList(QString);
     void getTask(QString listId,QString taskId);
@@ -65,6 +69,7 @@ private:
     QString accessToken;
     QString listsUrl;
     QNetworkAccessManager *qnam;
+    QString searchingListName; // for searching Id
 };
 
 #endif // GTASKHELPER_H

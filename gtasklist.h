@@ -10,6 +10,7 @@ class gTaskList : public QObject
     Q_OBJECT
 public:
     explicit gTaskList(QObject *parent = 0);
+    gTaskList(gTaskList &);
     void setTitle(const QString& newTitle){title = newTitle;}
     void setId(const QString& newId){ id = newId;}
     void setSelfLink(QString newSelfLink){selfLink = newSelfLink;}

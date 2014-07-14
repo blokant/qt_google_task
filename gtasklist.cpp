@@ -4,6 +4,14 @@ gTaskList::gTaskList(QObject *parent) :
 {
 }
 
+gTaskList::gTaskList(gTaskList &gtl)
+{
+    setTitle(gtl.getTitle());
+    setId(gtl.getId());
+    setSelfLink(gtl.getSelfLink());
+    setUpdated(gtl.getUpdated());
+}
+
 QByteArray* gTaskList::toJson()
 {
     QVariantMap m;

@@ -54,6 +54,13 @@ void gTaskHelper::getTaskList(QString listId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processgetTaskListReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::getTaskListId(QString listName)
+{
+    getTaskLists();
+    searchingListName = listName;
+    connect(this, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)) , this, SLOT(processgetTaskListId(QList<gTaskList*>*)) );
+}
+
 void gTaskHelper::insertTaskList(QString listName)
 {
     if(accessToken.isEmpty())
@@ -270,6 +277,19 @@ void gTaskHelper::processgetTaskListReply(QNetworkReply *r)
 
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processgetTaskListReply(QNetworkReply*)) );
+}
+
+void gTaskHelper::processgetTaskListId(QList<gTaskList*>* tls)
+{
+    for(int i = 0 ; i < tls->size(); i++)
+    {
+        if(tls->at(i)->getTitle() == searchingListName)
+        {
+          emit taskListIdRetrieved(tls->at(i)->getId());
+          break;
+        }
+    }
+    qDeleteAll(*tls);
 }
 
 gTaskList *gTaskHelper::getTaskListFromByteArray(QByteArray *ba) // some kinf of error code?

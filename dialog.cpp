@@ -71,6 +71,8 @@ void Dialog::slotTokenObtained(QString at)
     //connect(th, SIGNAL(taskListNotDeleted()) , this, SLOT(slotTaskListNotDeleted()) );
     //th->insertTaskList("мир21 Innovation_");
     //th->getTaskLists();
+    th->getTaskListId("Default List");
+    connect(th, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(slotTaskListIdRetrieved(QString)) );
     //th->getTask("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow", "MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDo4NjkzNTUwNjk");
     //connect(th, SIGNAL(taskRetrieved(gTask*)) , this, SLOT(slotTaskRetrieved(gTask*)) );
     //gTask *gt = new gTask("привет, мир","MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
@@ -140,6 +142,11 @@ void Dialog::slotTaskListUpdated(gTaskList *gtl)
 void Dialog::slotTaskListRetrieved(gTaskList *gtl)
 {
     qDebug() << "title:" << gtl->getTitle();
+}
+
+void Dialog::slotTaskListIdRetrieved(QString tlId)
+{
+    qDebug() << "Task List Id: " << tlId;
 }
 void Dialog::slotTaskRetrieved(gTask *gt)
 {
