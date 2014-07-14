@@ -46,6 +46,7 @@ public slots:
     //tasks
     void getTasksOfList(QString);
     void getTask(QString listId,QString taskId);
+    void insertTask(QString listId, gTask *gt);
     void processTasksOfListReply(QNetworkReply*);
     void processgetTaskReply(QNetworkReply*);
 
@@ -54,6 +55,8 @@ private slots:
     gTaskList* getTaskListFromMap(QVariantMap *m);
     gTask*     getTaskFromByteArray(QByteArray*);
     gTask*     getTaskFromMap(QVariantMap*);
+    QDateTime fromGoogleTimeFormat(QString);
+    QString   toGoogleTimeFormat(QDateTime&);
 private:
     QString listUrl;
     QString tasksAPIUrl;

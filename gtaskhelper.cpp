@@ -164,6 +164,22 @@ void gTaskHelper::getTask(QString listId, QString taskId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processgetTaskReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::insertTask(QString listId, gTask *gt)
+{
+    if(accessToken.isEmpty())
+    {
+        qDebug() << "Error: access token is empty";
+        return ;
+    }
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId ));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    //nwam->post(request, gt->get)
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processgetTaskReply(QNetworkReply*)) );
+}
+
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
@@ -295,16 +311,36 @@ gTask *gTaskHelper::getTaskFromMap(QVariantMap *mp)
     task->setStatus((*mp)["status"].toString());
     task->setPosition((*mp)["position"].toString());
 
-    QString dateTimeString = (*mp)["updated"].toString();
-    QStringList sl = dateTimeString.split("T");
+    QDateTime dt = fromGoogleTimeFormat( (*mp)["updated"].toString());
+    QDateTime due = fromGoogleTimeFormat( (*mp)["due"].toString() );
+   /* QStringList sl = dateTimeString.split("T");
     QStringList dateStringList = sl.at(0).split("-");
     QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
     QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
     QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
     QDateTime dt(*d,*t);
-    task->setDue(dt);
-    delete(d);
-    delete(t);
+    */
+    task->setDue(due);
     task->setUpdated(dt);
     return task;
+}
+
+QDateTime gTaskHelper::fromGoogleTimeFormat(QString dateTimeString)
+{
+    QStringList sl = dateTimeString.split("T");
+    QStringList dateStringList = sl.at(0).split("-");
+    QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
+    QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
+    QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
+    QDateTime *dt = new QDateTime(*d,*t);
+    delete(d);
+    delete(t);
+    return dt;
+}
+
+QString gTaskHelper::toGoogleTimeFormat(QDateTime &dt)
+{
+    QString gt = QString::number(dt.date().year()) + "-" + QString::number(dt.date().month()) + "-" + QString::number(dt.date().day());
+    gt += "T" + QString::number(dt.time().hour()) + ":"+ QString::number(dt.time().minute()) +":" + QString::number(dt.time().second() ) + ".000Z";
+    return gt;
 }

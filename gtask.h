@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QVariantMap>
 class gTask : public QObject
 {
     Q_OBJECT
@@ -37,6 +38,8 @@ public slots:
     void setHidden(bool  flag){hidden  = flag;}
     void setDue(QDateTime newDue){due = newDue;}
     void setUpdated(QDateTime newUpdated){updated = newUpdated;}
+    QString fromGoogleTimeFormat(QDateTime&);
+    QByteArray *toJson();
     //isOverDue?
 
 private:

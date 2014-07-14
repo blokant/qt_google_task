@@ -7,3 +7,27 @@ gTask::gTask(QObject *parent) :
     hidden  = false;
 
 }
+
+QString gTask::toGoogleTimeFormat(QDateTime &)
+{
+    QString gt = QString::number(dt.date().year()) + "-" + QString::number(dt.date().month()) + "-" + QString::number(dt.date().day());
+    gt += "T" + QString::number(dt.time().hour()) + ":"+ QString::number(dt.time().minute()) +":" + QString::number(dt.time().second() ) + ".000Z";
+    return gt;
+}
+
+QByteArray *gTask::toJson()
+{
+    QVariantMap m;
+    m.insert("status", getStatus());
+    m.insert("kind" , "tasks#task");
+
+    m.insert("title",getTitle());
+    m.insert("due", toGoogleTimeFormat(getDueTo()) );
+    m.insert("selflink", getSelfLink());
+
+    QJson::Serializer serializer;
+    bool ok;
+    QByteArray *ba = new QByteArray();
+    *ba = serializer.serialize(m, &ok);
+    return ba;
+}
