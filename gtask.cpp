@@ -8,7 +8,15 @@ gTask::gTask(QObject *parent) :
 
 }
 
-QString gTask::toGoogleTimeFormat(QDateTime &)
+gTask::gTask(QString taskTitle, QString taskListId)
+{
+  deleted = hidden = false;
+  title = taskTitle;
+  taskListId = taskListId;
+  due = QDateTime::currentDateTime();
+}
+
+QString gTask::toGoogleTimeFormat(QDateTime dt)
 {
     QString gt = QString::number(dt.date().year()) + "-" + QString::number(dt.date().month()) + "-" + QString::number(dt.date().day());
     gt += "T" + QString::number(dt.time().hour()) + ":"+ QString::number(dt.time().minute()) +":" + QString::number(dt.time().second() ) + ".000Z";
@@ -18,12 +26,9 @@ QString gTask::toGoogleTimeFormat(QDateTime &)
 QByteArray *gTask::toJson()
 {
     QVariantMap m;
-    m.insert("status", getStatus());
     m.insert("kind" , "tasks#task");
-
     m.insert("title",getTitle());
     m.insert("due", toGoogleTimeFormat(getDueTo()) );
-    m.insert("selflink", getSelfLink());
 
     QJson::Serializer serializer;
     bool ok;

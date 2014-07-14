@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QVariantMap>
+#include <qjson/serializer.h>
 class gTask : public QObject
 {
     Q_OBJECT
@@ -38,7 +39,7 @@ public slots:
     void setHidden(bool  flag){hidden  = flag;}
     void setDue(QDateTime newDue){due = newDue;}
     void setUpdated(QDateTime newUpdated){updated = newUpdated;}
-    QString fromGoogleTimeFormat(QDateTime&);
+    QString toGoogleTimeFormat(QDateTime);
     QByteArray *toJson();
     //isOverDue?
 

@@ -31,6 +31,7 @@ signals:
     //tasks
     void tasksOfListRetrieved(QList<gTask*>*);
     void taskRetrieved(gTask*);
+    void taskInserted(gTask*);
 public slots:
     void getTaskLists();
     void getTaskList(QString listId);
@@ -49,6 +50,7 @@ public slots:
     void insertTask(QString listId, gTask *gt);
     void processTasksOfListReply(QNetworkReply*);
     void processgetTaskReply(QNetworkReply*);
+    void processinsertTaskReply(QNetworkReply*);
 
 private slots:
     gTaskList* getTaskListFromByteArray(QByteArray *ba);

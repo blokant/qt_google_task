@@ -35,6 +35,7 @@ public slots:
     void slotTaskListRetrieved(gTaskList*);
     //tasks
     void slotTaskRetrieved(gTask*);
+    void slotTaskInserted(gTask*);
 };
 
 #endif // DIALOG_H

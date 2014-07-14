@@ -71,8 +71,15 @@ void Dialog::slotTokenObtained(QString at)
     //connect(th, SIGNAL(taskListNotDeleted()) , this, SLOT(slotTaskListNotDeleted()) );
     //th->insertTaskList("мир21 Innovation_");
     //th->getTaskLists();
-    th->getTask("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow", "MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDo4NjkzNTUwNjk");
-    connect(th, SIGNAL(taskRetrieved(gTask*)) , this, SLOT(slotTaskRetrieved(gTask*)) );
+    //th->getTask("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow", "MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDo4NjkzNTUwNjk");
+    //connect(th, SIGNAL(taskRetrieved(gTask*)) , this, SLOT(slotTaskRetrieved(gTask*)) );
+    //gTask *gt = new gTask("привет, мир","MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
+    //gt->setDue(QDateTime::currentDateTime());
+    //qDebug() << gt->toGoogleTimeFormat(QDateTime::currentDateTime());
+    //QByteArray *ba = gt->toJson();
+    //qDebug() << *ba;
+    //th->insertTask("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow", gt);
+    //connect(th, SIGNAL(taskInserted(gTask*)) , this, SLOT(slotTaskInserted(gTask*)) );
     //th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
     //connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
     //connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)), this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
@@ -137,4 +144,12 @@ void Dialog::slotTaskListRetrieved(gTaskList *gtl)
 void Dialog::slotTaskRetrieved(gTask *gt)
 {
     qDebug() << "title: " << gt->getTitle();
+}
+
+void Dialog::slotTaskInserted(gTask *gt)
+{
+    qDebug() << "Dialog::slotTaskInserted";
+    qDebug() <<"title: " << gt->getTitle();
+    qDebug() << "updated: " << gt->getUpdated().toString();
+    qDebug() << "due: " <<     gt->getDueTo().toString();
 }
