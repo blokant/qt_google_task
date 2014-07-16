@@ -36,8 +36,9 @@ signals:
 
 public slots:
     void getTaskLists();
-    void getTaskList(QString listId);
+    void getTaskListById(QString listId);
     void getTaskListId(QString listName);
+    void getTaskListByName(QString listName);
     void insertTaskList(QString );
     void deleteTaskList(QString );
     void updateTaskList(gTaskList *);

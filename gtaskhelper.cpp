@@ -38,7 +38,7 @@ void gTaskHelper::getTaskLists()
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTaskListsReply(QNetworkReply*)) );
 }
 
-void gTaskHelper::getTaskList(QString listId)
+void gTaskHelper::getTaskListById(QString listId)
 {
     if(accessToken.isEmpty())
     {
@@ -59,6 +59,12 @@ void gTaskHelper::getTaskListId(QString listName)
     getTaskLists();
     searchingListName = listName;
     connect(this, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)) , this, SLOT(processgetTaskListId(QList<gTaskList*>*)) );
+}
+
+void gTaskHelper::getTaskListByName(QString listName)
+{
+    getTaskListId(listName);
+    connect(this, SIGNAL(taskListIdRetrieved(QString)), this, SLOT(getTaskListById(QString)) );
 }
 
 void gTaskHelper::insertTaskList(QString listName)

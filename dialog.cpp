@@ -71,11 +71,13 @@ void Dialog::slotTokenObtained(QString at)
     //connect(th, SIGNAL(taskListNotDeleted()) , this, SLOT(slotTaskListNotDeleted()) );
     //th->insertTaskList("мир21 Innovation_");
     //th->getTaskLists();
-    th->getTaskListId("Default List");
-    connect(th, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(slotTaskListIdRetrieved(QString)) );
+    //th->getTaskListId("Default List");
+    //connect(th, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(slotTaskListIdRetrieved(QString)) );
     //th->getTask("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow", "MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDo4NjkzNTUwNjk");
     //connect(th, SIGNAL(taskRetrieved(gTask*)) , this, SLOT(slotTaskRetrieved(gTask*)) );
     //gTask *gt = new gTask("привет, мир","MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
+    th->getTaskListByName("Default List");
+    connect(th, SIGNAL(taskListRetrieved(gTaskList*)) , this, SLOT(slotTaskListRetrieved(gTaskList*)) );
     //gt->setDue(QDateTime::currentDateTime());
     //qDebug() << gt->toGoogleTimeFormat(QDateTime::currentDateTime());
     //QByteArray *ba = gt->toJson();
@@ -141,7 +143,8 @@ void Dialog::slotTaskListUpdated(gTaskList *gtl)
 
 void Dialog::slotTaskListRetrieved(gTaskList *gtl)
 {
-    qDebug() << "title:" << gtl->getTitle();
+    qDebug() << "title: " << gtl->getTitle();
+    qDebug() << "id: " << gtl->getId();
 }
 
 void Dialog::slotTaskListIdRetrieved(QString tlId)
