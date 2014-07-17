@@ -16,9 +16,10 @@ QByteArray* gTaskList::toJson()
 {
     QVariantMap m;
     m.insert("kind" , "tasks#taskList");
-    m.insert("id", getId());
-    m.insert("title",getTitle());
-    m.insert("selflink", getSelfLink());
+    if(getId() != "")
+        m.insert("id", getId());
+    if("" != getTitle())
+        m.insert("title",getTitle());
     QJson::Serializer serializer;
     bool ok;
     QByteArray *ba = new QByteArray();

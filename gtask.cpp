@@ -27,7 +27,8 @@ QByteArray *gTask::toJson()
 {
     QVariantMap m;
     m.insert("kind" , "tasks#task");
-    m.insert("title",getTitle());
+    if(getTitle() != "")
+        m.insert("title",getTitle());
     m.insert("due", toGoogleTimeFormat(getDueTo()) );
 
     QJson::Serializer serializer;
