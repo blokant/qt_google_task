@@ -34,6 +34,7 @@ public slots:
     void slotTaskListUpdated(gTaskList*);
     void slotTaskListRetrieved(gTaskList*);
     void slotTaskListIdRetrieved(QString);
+    void slotTasksOfListByName(QList<gTask*> *tasks);
     //tasks
     void slotTaskRetrieved(gTask*);
     void slotTaskInserted(gTask*);

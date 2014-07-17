@@ -50,7 +50,8 @@ public slots:
     void processgetTaskListReply(QNetworkReply*);
     void processgetTaskListId(QList<gTaskList *> *tls);
     //tasks
-    void getTasksOfList(QString);
+    void getTasksOfListById(QString);
+    void getTasksOfListByName(QString taskListName);
     void getTask(QString listId,QString taskId);
     void insertTask(QString listId, gTask *gt);
     void processTasksOfListReply(QNetworkReply*);

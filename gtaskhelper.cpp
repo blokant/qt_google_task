@@ -145,7 +145,7 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 }
 
 
-void gTaskHelper::getTasksOfList(QString listId)
+void gTaskHelper::getTasksOfListById(QString listId)
 {
     if(accessToken.isEmpty())
     {
@@ -159,6 +159,12 @@ void gTaskHelper::getTasksOfList(QString listId)
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
     nwam->get(*request);
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTasksOfListReply(QNetworkReply*)) );
+}
+
+void gTaskHelper::getTasksOfListByName(QString taskListName)
+{
+    getTaskListId(taskListName);
+    connect(this, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(getTasksOfListById(QString)) );
 }
 
 void gTaskHelper::getTask(QString listId, QString taskId)

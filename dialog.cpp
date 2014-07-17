@@ -76,8 +76,8 @@ void Dialog::slotTokenObtained(QString at)
     //th->getTask("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow", "MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDo4NjkzNTUwNjk");
     //connect(th, SIGNAL(taskRetrieved(gTask*)) , this, SLOT(slotTaskRetrieved(gTask*)) );
     //gTask *gt = new gTask("привет, мир","MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
-    th->getTaskListByName("Default List");
-    connect(th, SIGNAL(taskListRetrieved(gTaskList*)) , this, SLOT(slotTaskListRetrieved(gTaskList*)) );
+    //th->getTaskListByName("Default List");
+    //connect(th, SIGNAL(taskListRetrieved(gTaskList*)) , this, SLOT(slotTaskListRetrieved(gTaskList*)) );
     //gt->setDue(QDateTime::currentDateTime());
     //qDebug() << gt->toGoogleTimeFormat(QDateTime::currentDateTime());
     //QByteArray *ba = gt->toJson();
@@ -87,6 +87,8 @@ void Dialog::slotTokenObtained(QString at)
     //th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
     //connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
     //connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)), this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
+    th->getTasksOfListByName("Default List");
+    connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)), this, SLOT(slotTasksOfListByName(QList<gTask*>*)) );
 }
 
 void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
@@ -150,6 +152,14 @@ void Dialog::slotTaskListRetrieved(gTaskList *gtl)
 void Dialog::slotTaskListIdRetrieved(QString tlId)
 {
     qDebug() << "Task List Id: " << tlId;
+}
+
+void Dialog::slotTasksOfListByName(QList<gTask *> *tasks)
+{
+    foreach (gTask* gt, *tasks) {
+        qDebug() << "title: " << gt->getTitle();
+        qDebug() << "id:  " << gt->getId();
+    }
 }
 void Dialog::slotTaskRetrieved(gTask *gt)
 {

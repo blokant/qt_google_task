@@ -57,7 +57,7 @@ private:
         bool hidden;
         QDateTime due;
         QDateTime updated;
-        QString listId;
+        QString listId; // should be deleted? or just don't put it in toJson
 };
 
 #endif // GTASK_H
