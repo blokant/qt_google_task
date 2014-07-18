@@ -38,11 +38,11 @@ signals:
 public slots:
     void getTaskLists();
     void getTaskListById(QString listId);
-    void getTaskListId(QString listName);
-    void getTaskListByName(QString listName);
+    void getTaskListId(QString listTitle);
+    void getTaskListByTitle(QString listTitle);
     void insertTaskList(QString );
     void deleteTaskListById(QString listId);
-    void deleteTaskListByName(QString listName);
+    void deleteTaskListByTitle(QString listTitle);
     void updateTaskList(gTaskList *);
     //all the process* should be private
     void processTaskListsReply(QNetworkReply*);
@@ -53,7 +53,7 @@ public slots:
     void processgetTaskListId(QList<gTaskList *> *tls);
     //tasks
     void getTasksOfListById(QString);
-    void getTasksOfListByName(QString taskListName);
+    void getTasksOfListByTitle(QString taskListTitle);
     void getTask(QString listId,QString taskId);
     void insertTask(QString listId, gTask *gt);
     void processTasksOfListReply(QNetworkReply*);

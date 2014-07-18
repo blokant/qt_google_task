@@ -54,16 +54,16 @@ void gTaskHelper::getTaskListById(QString listId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processgetTaskListReply(QNetworkReply*)) );
 }
 
-void gTaskHelper::getTaskListId(QString listName)
+void gTaskHelper::getTaskListId(QString listTitle)
 {
     getTaskLists();
-    searchingListName = listName;
+    searchingListName = listTitle;
     connect(this, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)) , this, SLOT(processgetTaskListId(QList<gTaskList*>*)) );
 }
 
-void gTaskHelper::getTaskListByName(QString listName)
+void gTaskHelper::getTaskListByTitle(QString listTitle)
 {
-    getTaskListId(listName);
+    getTaskListId(listTitle);
     connect(this, SIGNAL(taskListIdRetrieved(QString)), this, SLOT(getTaskListById(QString)) );
 }
 
@@ -101,9 +101,9 @@ void gTaskHelper::deleteTaskListById(QString listId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processdeleteTaskListReply(QNetworkReply*)) );
 }
 
-void gTaskHelper::deleteTaskListByName(QString listName)
+void gTaskHelper::deleteTaskListByTitle(QString listTitle)
 {
-    getTaskListId(listName);
+    getTaskListId(listTitle);
     connect(this,SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(deleteTaskListById(QString)) );
 }
 
@@ -167,9 +167,9 @@ void gTaskHelper::getTasksOfListById(QString listId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTasksOfListReply(QNetworkReply*)) );
 }
 
-void gTaskHelper::getTasksOfListByName(QString taskListName)
+void gTaskHelper::getTasksOfListByTitle(QString taskListTitle)
 {
-    getTaskListId(taskListName);
+    getTaskListId(taskListTitle);
     connect(this, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(getTasksOfListById(QString)) );
 }
 
