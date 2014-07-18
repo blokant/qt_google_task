@@ -55,7 +55,7 @@ public slots:
     void getTasksOfListById(QString);
     void getTasksOfListByTitle(QString taskListTitle); // what hapns when i have 2 task with the same ttl
     void getTask(QString listId,QString taskId);
-    void insertTask(QString listId, gTask *gt);
+    void insertTaskByTaskListId(QString listId, gTask *gt);
     void processTasksOfListReply(QNetworkReply*);
     void processgetTaskReply(QNetworkReply*);
     void processinsertTaskReply(QNetworkReply*);

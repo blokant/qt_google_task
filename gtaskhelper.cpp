@@ -189,7 +189,7 @@ void gTaskHelper::getTask(QString listId, QString taskId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processgetTaskReply(QNetworkReply*)) );
 }
 
-void gTaskHelper::insertTask(QString listId, gTask *gt)
+void gTaskHelper::insertTaskByTaskListId(QString listId, gTask *gt)
 {
     if(accessToken.isEmpty())
     {
