@@ -101,6 +101,12 @@ void gTaskHelper::deleteTaskListById(QString listId)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processdeleteTaskListReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::deleteTaskListByName(QString listName)
+{
+    getTaskListId(listName);
+    connect(this,SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(deleteTaskListById(QString)) );
+}
+
 void gTaskHelper::updateTaskList(gTaskList *gtl)
 {
     if(accessToken.isEmpty())

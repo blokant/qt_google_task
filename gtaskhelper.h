@@ -42,6 +42,7 @@ public slots:
     void getTaskListByName(QString listName);
     void insertTaskList(QString );
     void deleteTaskListById(QString listId);
+    void deleteTaskListByName(QString listName);
     void updateTaskList(gTaskList *);
     //all the process* should be private
     void processTaskListsReply(QNetworkReply*);

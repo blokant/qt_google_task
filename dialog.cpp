@@ -71,6 +71,7 @@ void Dialog::slotTokenObtained(QString at)
     //connect(th, SIGNAL(taskListNotDeleted()) , this, SLOT(slotTaskListNotDeleted()) );
     //th->insertTaskList("мир21 Innovation_");
     //th->getTaskLists();
+    //connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)) , this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
     //th->getTaskListId("Default List");
     //connect(th, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(slotTaskListIdRetrieved(QString)) );
     //th->getTask("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow", "MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDo4NjkzNTUwNjk");
@@ -87,8 +88,11 @@ void Dialog::slotTokenObtained(QString at)
     //th->getTasksOfList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MDow");
     //connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
     //connect(th, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)), this, SLOT(slotTaskListObtained(QList<gTaskList*>*)) );
-    th->getTasksOfListByName("Default List");
-    connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)), this, SLOT(slotTasksOfListByName(QList<gTask*>*)) );
+    //th->getTasksOfListByName("Default List");
+    //connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)), this, SLOT(slotTasksOfListByName(QList<gTask*>*)) );
+    //th->insertTaskList("привет");
+    //th->deleteTaskListByName("привет");
+    //connect(th, SIGNAL(taskListDeleted()) , this , SLOT(slotTaskListDeleted()) );
 }
 
 void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
