@@ -85,7 +85,7 @@ void gTaskHelper::insertTaskList(QString listName)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processinsertTaskListReply(QNetworkReply*)) );
 }
 
-void gTaskHelper::deleteTaskList(QString listId)
+void gTaskHelper::deleteTaskListById(QString listId)
 {
     if(accessToken.isEmpty())
     {

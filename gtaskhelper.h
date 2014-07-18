@@ -21,6 +21,7 @@ public:
     gTaskHelper(QNetworkAccessManager*);
     void setAccessToken(QString strAccessToken);
 signals:
+    //taskLists
     void taskListsRetrieved(QList<gTaskList*>*);
     void taskListInserted(gTaskList*);
     void taskListNotInserted();
@@ -40,7 +41,7 @@ public slots:
     void getTaskListId(QString listName);
     void getTaskListByName(QString listName);
     void insertTaskList(QString );
-    void deleteTaskList(QString );
+    void deleteTaskListById(QString listId);
     void updateTaskList(gTaskList *);
     //all the process* should be private
     void processTaskListsReply(QNetworkReply*);
