@@ -8,11 +8,10 @@ gTask::gTask(QObject *parent) :
 
 }
 
-gTask::gTask(QString taskTitle, QString taskListId)
+gTask::gTask(QString taskTitle)
 {
   deleted = hidden = false;
   title = taskTitle;
-  taskListId = taskListId;
   due = QDateTime::currentDateTime();
 }
 

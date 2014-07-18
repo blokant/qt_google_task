@@ -10,7 +10,7 @@ class gTask : public QObject
     Q_OBJECT
 public:
     explicit gTask(QObject *parent = 0);
-    gTask(QString taskTitle, QString taskListId);
+    gTask(QString taskTitle);
 
 signals:
 
@@ -19,7 +19,6 @@ public slots:
     QString getId(){return id;}
     QString getEtag(){return etag;}
     QString getTitle(){return title;}
-    QString getListId(){return listId;}
     QString getSelfLink(){return selflink;}
     QString getParentTask(){return parentTask;}
     QString getPosition(){return position;}
@@ -57,7 +56,6 @@ private:
         bool hidden;
         QDateTime due;
         QDateTime updated;
-        QString listId; // should be deleted? or just don't put it in toJson
 };
 
 #endif // GTASK_H
