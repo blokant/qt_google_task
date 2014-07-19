@@ -156,6 +156,7 @@ void gTaskHelper::getTasksOfListById(QString listId)
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
     nwam->get(*request);
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processTasksOfListReply(QNetworkReply*)) );
+    disconnect(this, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(getTasksOfListById(QString)) );
 }
 
 void gTaskHelper::getTasksOfListByTitle(QString taskListTitle)
@@ -213,14 +214,12 @@ void gTaskHelper::updateTaskByTaskListId(QString listId, gTask *gt)
     delete(ba);
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processupdateTaskReply(QNetworkReply*)) );
 }
-/*
 void gTaskHelper::updateTaskByTaskListTitle(QString listTitle, gTask *gt)
 {
-    qDebug() <<"updateTaskByTaskListTitle";
     connect(this,SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(processupdateTaskByTaskListTitle(QString)) );
     getTaskListId(listTitle);
     currentTask = gt;
-}*/
+}
 
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {

@@ -97,8 +97,9 @@ void Dialog::slotTokenObtained(QString at)
     //gTask *gt2= new gTask("тест2");
     //th->insertTaskByTaskListTitle("selfstudy",gt2);
     //connect(th,SIGNAL(taskInserted(gTask*)) , this, SLOT(slotTaskInserted(gTask*)) );
-    th->getTasksOfListByTitle("selfstudy");
-    connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
+
+     th->getTasksOfListByTitle("selfstudy");
+     connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
 }
 
 void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
@@ -116,6 +117,7 @@ void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
 
 void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
 {
+    qDebug() << "slotTasksOfListObtained();";
     gTask* gt = NULL;
     for(int i = 0; i < tasks->size(); i++)
     {
@@ -125,7 +127,7 @@ void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
         qDebug() << "id: " << tasks->at(i)->getId();
         qDebug() << "status: " << tasks->at(i)->getStatus();
         */
-        if(tasks->at(i)->getTitle() == "тест6")
+        if(tasks->at(i)->getTitle() == "Проект 2501")
         {
             gt = tasks->at(i);
             break;
@@ -134,8 +136,13 @@ void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
 
     qDebug() << "old id: " << gt->getId();
     qDebug() <<"old title: " << gt->getTitle();
-    gt->setTitle("тест7");
-    th->updateTaskByTaskListId("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MTE0ODUyNDk6MA",gt);
+    gt->setTitle("Проект 2501");
+    QDateTime qdt;
+    qdt = QDateTime::currentDateTime();
+    qdt = qdt.addDays(1);
+    gt->setDue(qdt);
+   // th->updateTaskByTaskListId("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MTE0ODUyNDk6MA",gt);
+    th->updateTaskByTaskListTitle("selfstudy", gt);
     connect(th, SIGNAL(taskUpdated(gTask*)) , this, SLOT(slotTaskUpdated(gTask*)) );
 }
 
