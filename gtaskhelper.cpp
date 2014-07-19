@@ -19,6 +19,16 @@ gTaskHelper::gTaskHelper(QNetworkAccessManager *q)
     currentTask = NULL;
 }
 
+bool gTaskHelper::checkAccessToken()
+{
+    if(accessToken.isEmpty())
+    {
+        qDebug() << "Error: access token is empty";
+        return false;
+    }
+    return true;
+}
+
 void gTaskHelper::setAccessToken(QString strAccessToken)
 {
     accessToken = strAccessToken;
@@ -26,11 +36,8 @@ void gTaskHelper::setAccessToken(QString strAccessToken)
 
 void gTaskHelper::getTaskLists()
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -42,11 +49,8 @@ void gTaskHelper::getTaskLists()
 
 void gTaskHelper::getTaskListById(QString listId)
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl + "/" + listId));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -71,11 +75,8 @@ void gTaskHelper::getTaskListByTitle(QString listTitle)
 
 void gTaskHelper::insertTaskList(QString listName)
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -89,11 +90,8 @@ void gTaskHelper::insertTaskList(QString listName)
 
 void gTaskHelper::deleteTaskListById(QString listId)
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl + "/" + listId));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -111,11 +109,8 @@ void gTaskHelper::deleteTaskListByTitle(QString listTitle)
 
 void gTaskHelper::updateTaskList(gTaskList *gtl)
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(listUrl + "/" + gtl->getId()));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -152,11 +147,8 @@ void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 
 void gTaskHelper::getTasksOfListById(QString listId)
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/"));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -174,11 +166,8 @@ void gTaskHelper::getTasksOfListByTitle(QString taskListTitle)
 
 void gTaskHelper::getTask(QString listId, QString taskId)
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/" + taskId));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -190,11 +179,8 @@ void gTaskHelper::getTask(QString listId, QString taskId)
 
 void gTaskHelper::insertTaskByTaskListId(QString listId, gTask *gt)
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/"));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -215,11 +201,8 @@ void gTaskHelper::insertTaskByTaskListTitle(QString listTitle, gTask *gt)
 
 void gTaskHelper::updateTaskByTaskListId(QString listId, gTask *gt)
 {
-    if(accessToken.isEmpty())
-    {
-        qDebug() << "Error: access token is empty";
+    if(!checkAccessToken())
         return ;
-    }
     QNetworkAccessManager *nwam =  qnam;
     QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/" + gt->getId()));
     request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -414,13 +397,6 @@ gTask *gTaskHelper::getTaskFromMap(QVariantMap *mp)
     task->setSelfLink((*mp)["selfLink"].toString());
     QDateTime dt = fromGoogleTimeFormat( (*mp)["updated"].toString());
     QDateTime due = fromGoogleTimeFormat( (*mp)["due"].toString() );
-   /* QStringList sl = dateTimeString.split("T");
-    QStringList dateStringList = sl.at(0).split("-");
-    QStringList timeStringList = sl.at(1).split(".").at(0).split(":");
-    QDate *d = new QDate(dateStringList.at(0).toInt(), dateStringList.at(1).toInt(), dateStringList.at(2).toInt());
-    QTime *t = new QTime(timeStringList.at(0).toInt(), timeStringList.at(1).toInt(), timeStringList.at(2).toInt());
-    QDateTime dt(*d,*t);
-    */
     task->setDue(due);
     task->setUpdated(dt);
     return task;

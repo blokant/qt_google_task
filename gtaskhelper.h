@@ -37,6 +37,7 @@ signals:
     void taskUpdated(gTask*);
 
 public slots:
+    bool checkAccessToken();
     void getTaskLists();
     void getTaskListById(QString listId);
     void getTaskListId(QString listTitle);
