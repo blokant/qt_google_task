@@ -56,9 +56,11 @@ public slots:
     void getTasksOfListByTitle(QString taskListTitle); // what hapns when i have 2 task with the same ttl
     void getTask(QString listId,QString taskId);
     void insertTaskByTaskListId(QString listId, gTask *gt);
+    void insertTaskByTaskListTitle(QString listTitle, gTask* gt);
     void processTasksOfListReply(QNetworkReply*);
     void processgetTaskReply(QNetworkReply*);
     void processinsertTaskReply(QNetworkReply*);
+    void processinsertTaskByTaskListTitle(QString taskListId);
 
 private slots:
     gTaskList* getTaskListFromByteArray(QByteArray *ba);
@@ -74,6 +76,7 @@ private:
     QString listsUrl;
     QNetworkAccessManager *qnam;
     QString searchingListName; // for searching Id
+    gTask* currentTask;
 };
 
 #endif // GTASKHELPER_H

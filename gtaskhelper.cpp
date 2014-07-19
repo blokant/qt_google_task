@@ -8,6 +8,7 @@ gTaskHelper::gTaskHelper(QObject *parent) :
 {
     listUrl = "https://www.googleapis.com/tasks/v1/users/@me/lists";
     tasksAPIUrl = "https://www.googleapis.com/tasks/v1/";
+    currentTask = NULL;
 }
 
 gTaskHelper::gTaskHelper(QNetworkAccessManager *q)
@@ -15,6 +16,7 @@ gTaskHelper::gTaskHelper(QNetworkAccessManager *q)
     listUrl = "https://www.googleapis.com/tasks/v1/users/@me/lists";
     tasksAPIUrl = "https://www.googleapis.com/tasks/v1/";
     qnam = q;
+    currentTask = NULL;
 }
 
 void gTaskHelper::setAccessToken(QString strAccessToken)
@@ -207,6 +209,13 @@ void gTaskHelper::insertTaskByTaskListId(QString listId, gTask *gt)
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processinsertTaskReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::insertTaskByTaskListTitle(QString listTitle, gTask *gt)
+{
+    getTaskListId(listTitle);
+    currentTask = gt;
+    connect(this, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(processinsertTaskByTaskListTitle(QString)) );
+}
+
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
@@ -252,6 +261,11 @@ void gTaskHelper::processinsertTaskReply(QNetworkReply *r)
                 emit taskInserted(gt);
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processinsertTaskReply(QNetworkReply*)) );
+}
+
+void gTaskHelper::processinsertTaskByTaskListTitle(QString taskListId)
+{
+    insertTaskByTaskListId(taskListId, currentTask);
 }
 
 void gTaskHelper::processinsertTaskListReply(QNetworkReply *r)
