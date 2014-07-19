@@ -28,16 +28,20 @@ public slots:
     bool isDeleted(){return deleted;}
     QDateTime getDueTo(){return due;}
     QDateTime getUpdated(){return updated;}
+    QDateTime getCompleted(){return completed;}
     void setTitle(QString newTitle){title = newTitle;}
     void setId(QString newId){ id = newId;}
     void setNotes(QString newNotes){notes = newNotes;}
     void setPosition(QString newPosition){position = newPosition;}
     void setParentTask(QString ParentId){parentTask = ParentId;}
     void setStatus(QString newStatus){ status = newStatus;}
+    void setSelfLink(QString newSelfLink){selflink = newSelfLink;}
+    void setEtag(QString newEtag){ etag = newEtag;}
     void setDeleted(bool flag){deleted = flag;}
     void setHidden(bool  flag){hidden  = flag;}
     void setDue(QDateTime newDue){due = newDue;}
     void setUpdated(QDateTime newUpdated){updated = newUpdated;}
+    void setCompleted(QDateTime newCompleted){completed = newCompleted;}
     QString toGoogleTimeFormat(QDateTime);
     QByteArray *toJson();
     //isOverDue?
@@ -56,6 +60,7 @@ private:
         bool hidden;
         QDateTime due;
         QDateTime updated;
+        QDateTime completed;
 };
 
 #endif // GTASK_H

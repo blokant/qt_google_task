@@ -125,7 +125,7 @@ void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
         qDebug() << "id: " << tasks->at(i)->getId();
         qDebug() << "status: " << tasks->at(i)->getStatus();
         */
-        if(tasks->at(i)->getTitle() == "тест2")
+        if(tasks->at(i)->getTitle() == "тест6")
         {
             gt = tasks->at(i);
             break;
@@ -134,9 +134,9 @@ void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
 
     qDebug() << "old id: " << gt->getId();
     qDebug() <<"old title: " << gt->getTitle();
-    gt->setTitle("тест3");
-   // th->updateTaskByTaskListTitle("selfstudy",gt);
-   // connect(th, SIGNAL(taskUpdated(gTask*)) , this, SLOT(slotTaskUpdated(gTask*)) );
+    gt->setTitle("тест7");
+    th->updateTaskByTaskListId("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MTE0ODUyNDk6MA",gt);
+    connect(th, SIGNAL(taskUpdated(gTask*)) , this, SLOT(slotTaskUpdated(gTask*)) );
 }
 
 void Dialog::slotTaskListInserted(gTaskList *gtl)

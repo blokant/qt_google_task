@@ -59,7 +59,7 @@ public slots:
     void insertTaskByTaskListId(QString listId, gTask *gt);
     void insertTaskByTaskListTitle(QString listTitle, gTask* gt);
     void updateTaskByTaskListId(QString listId, gTask *gt);
-    void updateTaskByTaskListTitle(QString listTitle, gTask* gt);
+    //void updateTaskByTaskListTitle(QString listTitle, gTask* gt);
     void processTasksOfListReply(QNetworkReply*);
     void processgetTaskReply(QNetworkReply*);
     void processinsertTaskReply(QNetworkReply*);

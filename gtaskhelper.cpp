@@ -126,9 +126,6 @@ void gTaskHelper::updateTaskList(gTaskList *gtl)
     delete(ba);
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processupdateTaskListReply(QNetworkReply*)) );
 }
-
-
-
 void gTaskHelper::processTaskListsReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
@@ -229,19 +226,18 @@ void gTaskHelper::updateTaskByTaskListId(QString listId, gTask *gt)
     QString at = "Bearer " + accessToken;
     request->setRawHeader("Authorization", QByteArray(at.toAscii()));
     QByteArray *ba = gt->toJson();
-    nwam->post(*request, *ba);
-    qDebug() << "ba: " << *ba;
+    nwam->put(*request, *ba);
     delete(ba);
     connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processupdateTaskReply(QNetworkReply*)) );
 }
-
+/*
 void gTaskHelper::updateTaskByTaskListTitle(QString listTitle, gTask *gt)
 {
     qDebug() <<"updateTaskByTaskListTitle";
     connect(this,SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(processupdateTaskByTaskListTitle(QString)) );
     getTaskListId(listTitle);
     currentTask = gt;
-}
+}*/
 
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
@@ -296,7 +292,6 @@ void gTaskHelper::processupdateTaskReply(QNetworkReply *r)
     if(ba.isEmpty() )
         return;
     gTask* gt = getTaskFromByteArray(&ba);
-    qDebug() << "ba2: " << *ba;
     if(gt->getId().isEmpty() == false)
                 emit taskUpdated(gt);
     r->deleteLater();
@@ -310,7 +305,6 @@ void gTaskHelper::processinsertTaskByTaskListTitle(QString taskListId)
 
 void gTaskHelper::processupdateTaskByTaskListTitle(QString taskListId)
 {
-    qDebug() << "processupdateTaskByTaskListTitle";
     updateTaskByTaskListId(taskListId,currentTask);
 }
 
@@ -360,7 +354,6 @@ void gTaskHelper::processgetTaskListReply(QNetworkReply *r)
 void gTaskHelper::processgetTaskListId(QList<gTaskList*>* tls)
 {
     disconnect(this, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)) , this, SLOT(processgetTaskListId(QList<gTaskList*>*)) );
-    qDebug()<<"slot";
     for(int i = 0 ; i < tls->size(); i++)
     {
         if(tls->at(i)->getTitle() == searchingListName)
@@ -417,7 +410,8 @@ gTask *gTaskHelper::getTaskFromMap(QVariantMap *mp)
     task->setId((*mp)["id"].toString());
     task->setStatus((*mp)["status"].toString());
     task->setPosition((*mp)["position"].toString());
-
+    task->setEtag((*mp)["etag"].toString());
+    task->setSelfLink((*mp)["selfLink"].toString());
     QDateTime dt = fromGoogleTimeFormat( (*mp)["updated"].toString());
     QDateTime due = fromGoogleTimeFormat( (*mp)["due"].toString() );
    /* QStringList sl = dateTimeString.split("T");
