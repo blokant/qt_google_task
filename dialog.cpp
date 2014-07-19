@@ -93,10 +93,12 @@ void Dialog::slotTokenObtained(QString at)
     //th->insertTaskList("привет");
     //th->deleteTaskListByName("привет");
     //connect(th, SIGNAL(taskListDeleted()) , this , SLOT(slotTaskListDeleted()) );
-    gTask *gt = new gTask("test1");
-    gTask *gt2= new gTask("тест2");
-    th->insertTaskByTaskListTitle("selfstudy",gt2);
-    connect(th,SIGNAL(taskInserted(gTask*)) , this, SLOT(slotTaskInserted(gTask*)) );
+    //gTask *gt = new gTask("test1");
+    //gTask *gt2= new gTask("тест2");
+    //th->insertTaskByTaskListTitle("selfstudy",gt2);
+    //connect(th,SIGNAL(taskInserted(gTask*)) , this, SLOT(slotTaskInserted(gTask*)) );
+    th->getTasksOfListByTitle("selfstudy");
+    connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
 }
 
 void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
@@ -114,14 +116,27 @@ void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
 
 void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
 {
+    gTask* gt = NULL;
     for(int i = 0; i < tasks->size(); i++)
     {
-        qDebug() << "task " + QString::number(i);
+   /*     qDebug() << "task " + QString::number(i);
         qDebug() << "title: " << tasks->at(i)->getTitle();
         qDebug() << "due: " << tasks->at(i)->getDueTo().toString();
         qDebug() << "id: " << tasks->at(i)->getId();
         qDebug() << "status: " << tasks->at(i)->getStatus();
+        */
+        if(tasks->at(i)->getTitle() == "тест2")
+        {
+            gt = tasks->at(i);
+            break;
+        }
     }
+
+    qDebug() << "old id: " << gt->getId();
+    qDebug() <<"old title: " << gt->getTitle();
+    gt->setTitle("тест3");
+   // th->updateTaskByTaskListTitle("selfstudy",gt);
+   // connect(th, SIGNAL(taskUpdated(gTask*)) , this, SLOT(slotTaskUpdated(gTask*)) );
 }
 
 void Dialog::slotTaskListInserted(gTaskList *gtl)
@@ -180,4 +195,11 @@ void Dialog::slotTaskInserted(gTask *gt)
     qDebug() <<"title: " << gt->getTitle();
     qDebug() << "updated: " << gt->getUpdated().toString();
     qDebug() << "due: " <<     gt->getDueTo().toString();
+}
+
+void Dialog::slotTaskUpdated(gTask *gt)
+{
+    qDebug() <<"slotTaskUpdated();";
+    qDebug() <<" new title: "<< gt->getTitle();
+    qDebug() << "new id: " << gt->getId();
 }

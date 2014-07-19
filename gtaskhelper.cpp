@@ -216,6 +216,33 @@ void gTaskHelper::insertTaskByTaskListTitle(QString listTitle, gTask *gt)
     connect(this, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(processinsertTaskByTaskListTitle(QString)) );
 }
 
+void gTaskHelper::updateTaskByTaskListId(QString listId, gTask *gt)
+{
+    if(accessToken.isEmpty())
+    {
+        qDebug() << "Error: access token is empty";
+        return ;
+    }
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/" + gt->getId()));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    QByteArray *ba = gt->toJson();
+    nwam->post(*request, *ba);
+    qDebug() << "ba: " << *ba;
+    delete(ba);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processupdateTaskReply(QNetworkReply*)) );
+}
+
+void gTaskHelper::updateTaskByTaskListTitle(QString listTitle, gTask *gt)
+{
+    qDebug() <<"updateTaskByTaskListTitle";
+    connect(this,SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(processupdateTaskByTaskListTitle(QString)) );
+    getTaskListId(listTitle);
+    currentTask = gt;
+}
+
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
@@ -257,15 +284,34 @@ void gTaskHelper::processinsertTaskReply(QNetworkReply *r)
     if(ba.isEmpty() )
         return;
     gTask* gt = getTaskFromByteArray(&ba);
-    if(gt->getTitle().isEmpty() == false)
+    if(gt->getId().isEmpty() == false)
                 emit taskInserted(gt);
     r->deleteLater();
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processinsertTaskReply(QNetworkReply*)) );
 }
 
+void gTaskHelper::processupdateTaskReply(QNetworkReply *r)
+{
+    QByteArray ba = r->readAll(); // may cause partial answer
+    if(ba.isEmpty() )
+        return;
+    gTask* gt = getTaskFromByteArray(&ba);
+    qDebug() << "ba2: " << *ba;
+    if(gt->getId().isEmpty() == false)
+                emit taskUpdated(gt);
+    r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processupdateTaskReply(QNetworkReply*)) );
+}
+
 void gTaskHelper::processinsertTaskByTaskListTitle(QString taskListId)
 {
     insertTaskByTaskListId(taskListId, currentTask);
+}
+
+void gTaskHelper::processupdateTaskByTaskListTitle(QString taskListId)
+{
+    qDebug() << "processupdateTaskByTaskListTitle";
+    updateTaskByTaskListId(taskListId,currentTask);
 }
 
 void gTaskHelper::processinsertTaskListReply(QNetworkReply *r)
@@ -313,6 +359,8 @@ void gTaskHelper::processgetTaskListReply(QNetworkReply *r)
 
 void gTaskHelper::processgetTaskListId(QList<gTaskList*>* tls)
 {
+    disconnect(this, SIGNAL(taskListsRetrieved(QList<gTaskList*>*)) , this, SLOT(processgetTaskListId(QList<gTaskList*>*)) );
+    qDebug()<<"slot";
     for(int i = 0 ; i < tls->size(); i++)
     {
         if(tls->at(i)->getTitle() == searchingListName)
@@ -321,7 +369,8 @@ void gTaskHelper::processgetTaskListId(QList<gTaskList*>* tls)
           break;
         }
     }
-    qDeleteAll(*tls);
+    if(tls)
+        qDeleteAll(*tls);
 }
 
 gTaskList *gTaskHelper::getTaskListFromByteArray(QByteArray *ba) // some kinf of error code?
