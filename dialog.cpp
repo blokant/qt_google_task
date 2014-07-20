@@ -94,7 +94,7 @@ void Dialog::slotTokenObtained(QString at)
     //th->deleteTaskListByName("привет");
     //connect(th, SIGNAL(taskListDeleted()) , this , SLOT(slotTaskListDeleted()) );
     //gTask *gt = new gTask("test1");
-    //gTask *gt2= new gTask("проект 2501");
+    //gTask *gt2= new gTask("Проект 2501");
     //th->insertTaskByTaskListTitle("selfstudy",gt2);
     //connect(th,SIGNAL(taskInserted(gTask*)) , this, SLOT(slotTaskInserted(gTask*)) );
 
@@ -141,11 +141,12 @@ void Dialog::slotTasksOfListObtained(QList<gTask *> *tasks)
     qdt = gt->getDueTo();
     qdt = qdt.addDays(1);
     gt->setDue(qdt);
-    th->deleteTaskByTaskListId("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MTE0ODUyNDk6MA", gt);
+    //th->deleteTaskByTaskListId("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MTE0ODUyNDk6MA", gt->getId());
+    th->deleteTaskByTaskListTitle("selfstudy", gt->getId());
     connect(th, SIGNAL(taskDeleted()) , this, SLOT(slotTaskDeleted()) );
    // th->updateTaskByTaskListId("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MTE0ODUyNDk6MA",gt);
    // th->updateTaskByTaskListTitle("selfstudy", gt);
-    connect(th, SIGNAL(taskUpdated(gTask*)) , this, SLOT(slotTaskUpdated(gTask*)) );
+   // connect(th, SIGNAL(taskUpdated(gTask*)) , this, SLOT(slotTaskUpdated(gTask*)) );
 }
 
 void Dialog::slotTaskListInserted(gTaskList *gtl)

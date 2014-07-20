@@ -63,7 +63,8 @@ public slots:
     void insertTaskByTaskListTitle(QString listTitle, gTask* gt);
     void updateTaskByTaskListId(QString listId, gTask *gt);
     void updateTaskByTaskListTitle(QString listTitle, gTask* gt);
-    void deleteTaskByTaskListId(QString listId, gTask* gt);
+    void deleteTaskByTaskListId(QString listId, QString taskId);
+    void deleteTaskByTaskListTitle(QString listTitle, QString taskId);
     void processTasksOfListReply(QNetworkReply*);
     void processgetTaskReply(QNetworkReply*);
     void processinsertTaskReply(QNetworkReply*);
@@ -71,6 +72,7 @@ public slots:
     void processinsertTaskByTaskListTitle(QString taskListId);
     void processupdateTaskByTaskListTitle(QString taskListId);
     void processdeleteTaskByTaskListId(QNetworkReply* r);
+    void processdeleteTaskByTaskListTitle(QString listId);
 private slots:
     gTaskList* getTaskListFromByteArray(QByteArray *ba);
     gTaskList* getTaskListFromMap(QVariantMap *m);
@@ -86,6 +88,7 @@ private:
     QNetworkAccessManager *qnam;
     QString searchingListName; // for searching Id
     gTask* currentTask;
+    QString currentTaskId;
 };
 
 #endif // GTASKHELPER_H
