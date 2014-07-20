@@ -221,6 +221,19 @@ void gTaskHelper::updateTaskByTaskListTitle(QString listTitle, gTask *gt)
     currentTask = gt;
 }
 
+void gTaskHelper::deleteTaskByTaskListId(QString listId, gTask *gt)
+{
+    if(!checkAccessToken())
+        return ;
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/tasks/" + gt->getId()));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    nwam->deleteResource(*request);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processdeleteTaskByTaskListId(QNetworkReply*)) );
+}
+
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
@@ -288,6 +301,17 @@ void gTaskHelper::processinsertTaskByTaskListTitle(QString taskListId)
 void gTaskHelper::processupdateTaskByTaskListTitle(QString taskListId)
 {
     updateTaskByTaskListId(taskListId,currentTask);
+}
+
+void gTaskHelper::processdeleteTaskByTaskListId(QNetworkReply *r)
+{
+    QByteArray ba = r->readAll(); // may cause partial answer
+    if(ba.size() == 0)
+        emit taskDeleted();
+    else
+        emit taskNotDeleted();
+    r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processdeleteTaskByTaskListId(QNetworkReply*)) );
 }
 
 void gTaskHelper::processinsertTaskListReply(QNetworkReply *r)
