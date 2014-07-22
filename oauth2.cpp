@@ -26,12 +26,13 @@ OAuth2::OAuth2(QWidget* parent)
 }
 OAuth2::OAuth2(QWidget* parent, QNetworkAccessManager *qnam)
 {
+    conf = new QSettings("MegawarpSoftware", "goauth");
     m_strEndPoint = "https://accounts.google.com/o/oauth2/auth";
     m_strTokenAddress = "https://accounts.google.com/o/oauth2/token";
     m_strScope = "https://www.googleapis.com/auth/tasks";
-    m_strClientID = "773994449559-57kdeaogcku39qk3ceqqbebm6fsudc5u.apps.googleusercontent.com";
-    m_strRedirectURI = "urn:ietf:wg:oauth:2.0:oob";
-    m_strClientSecret = "VDtJ21xZOPotTg7o7UJz3MbT";
+    m_strClientID = conf->value("client_id").toString();
+    m_strRedirectURI = conf->value("redirect_uri").toString();;
+    m_strClientSecret = conf->value("client_secret").toString();;
     m_strResponseType = "code";
     m_strGrantType = "authorization_code";
     m_strCompanyName = "GTasksManager"; //You company here
@@ -39,7 +40,7 @@ OAuth2::OAuth2(QWidget* parent, QNetworkAccessManager *qnam)
     m_pLoginDialog = new LoginDialog(parent);
     m_pParent = parent;
     connect(m_pLoginDialog, SIGNAL(accessCodeObtained()) , this, SLOT(slotAccessCodeObtained()) );
-    conf = new QSettings("MegawarpSoftware", "goauth");
+
     this->qnam = qnam;
 }
 
