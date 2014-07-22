@@ -165,14 +165,12 @@ void OAuth2::obtainAccessToken()
     params.addQueryItem("redirect_uri",m_strRedirectURI);
     params.addQueryItem("scope",m_strScope);
     data.append(params.encodedQuery());
-    //data.remove(0,1);
     nwam->post(*request,data);
     connect(nwam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
 }
 
 void OAuth2::slotProcessPostReply(QNetworkReply *r) // getting token (may be combine two process.. funcs later
 {
-   // qDebug() << "slotProcessPostReply()";
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotProcessPostReply(QNetworkReply*)) );
     QByteArray ba = r->readAll();
     r->deleteLater();
@@ -223,7 +221,6 @@ void OAuth2::slotProcessRefreshedToken(QNetworkReply *r)
     disconnect(qnam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
     QByteArray ba = r->readAll();
     r->deleteLater();
-    //qDebug() << "reply: " << json;
     if(ba.contains("token") == false)
     {
         qDebug() << "json does not contain token info";
@@ -271,7 +268,6 @@ void OAuth2::refreshAccessToken()
     params.addQueryItem("client_id",m_strClientID);
     data.append(params.encodedQuery());
     nwam->post(*request,data);
-    //qDebug() << "data: " << data;
     connect(nwam, SIGNAL(finished(QNetworkReply*))  , this, SLOT(slotProcessRefreshedToken(QNetworkReply*)) );
 }
 

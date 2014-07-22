@@ -7,14 +7,9 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    //m_pOAuth2 = new OAuth2(this);
     conf = new QSettings("MegawarpSoftware", "taskman");
-    //m_pOAuth2->getAccessToken();
-    //qDebug() << "Befire"
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-
 
     qnam = new QNetworkAccessManager();
     m_pOAuth2 = new OAuth2(this,qnam);
@@ -37,29 +32,12 @@ Dialog::~Dialog()
 
 void Dialog::slotLoginDone()
 {
-    //QSettings conf("MegawarpSoftware", "taskman");
-  //  qDebug() << "slot login done";
-    if(conf->value("refresh_token").toString().isEmpty())
-    {
-        //conf->setValue("access_token" , m_pOAuth2->getAccessToken());
-        //conf->setValue("refresh_token" ,m_pOAuth2->getRefreshToken());
-    }
-  /*  qDebug() << "in dialog:" << conf->value("refresh_token").toString();
-    qDebug() << "isvalid: " << m_pOAuth2->isTokenValid();
-    qDebug() << "access_token: " << m_pOAuth2->getAccessToken();
-    qDebug() << "m_pOAuth2->getat(): " << m_pOAuth2->getAccessToken();
-    qDebug() << "m_pOAuth2->getrt(): " << m_pOAuth2->getRefreshToken();
-    */
-    //gTaskHelper *th = new gTaskHelper(qnam);
     connect(m_pOAuth2, SIGNAL(AccessTokenArrived(QString)) , this, SLOT(slotTokenObtained(QString)) );
     m_pOAuth2->getAccessToken();
-    //th->setAccessToken(m_pOAuth2->getAccessToken());
-    //th->getTaskLists();
 }
 
 void Dialog::slotTokenObtained(QString at)
 {
-    //qDebug() << "updated token is: " << at;
     th->setAccessToken(at);
     //th->getTaskList("MTMyMTA1NjY4MzI1MTM4NjQ5MjY6MTE0ODUyNDk6MA");
     //connect(th, SIGNAL(taskListRetrieved(gTaskList*)) , this, SLOT(slotTaskListRetrieved(gTaskList*)) );
