@@ -94,12 +94,13 @@ void Dialog::slotTokenObtained(QString at)
     //th->deleteTaskListByName("привет");
     //connect(th, SIGNAL(taskListDeleted()) , this , SLOT(slotTaskListDeleted()) );
     //gTask *gt = new gTask("test1");
-    gTask *gt2= new gTask("Проект 2501");
-    th->insertTaskByTaskListTitle("selfstudy",gt2);
-    connect(th,SIGNAL(taskInserted(gTask*)) , this, SLOT(slotTaskInserted(gTask*)) );
-
+    //gTask *gt2= new gTask("Проект 2501");
+    //th->insertTaskByTaskListTitle("Lab Selling",gt2);
+    //connect(th,SIGNAL(taskInserted(gTask*)) , this, SLOT(slotTaskInserted(gTask*)) );
     // th->getTasksOfListByTitle("selfstudy");
     // connect(th, SIGNAL(tasksOfListRetrieved(QList<gTask*>*)) , this, SLOT(slotTasksOfListObtained(QList<gTask*>*)) );
+    th->clearTaskListByTitle("Lab Selling");
+    connect(th, SIGNAL(taskListCleared()) , this, SLOT(slotTaskListCleared()));
 }
 
 void Dialog::slotTaskListObtained(QList<gTaskList *> *lists)
@@ -217,4 +218,9 @@ void Dialog::slotTaskUpdated(gTask *gt)
 void Dialog::slotTaskDeleted()
 {
     qDebug() << "slotTaskDeleted();";
+}
+
+void Dialog::slotTaskListCleared()
+{
+    qDebug() << "slotTaskListCleared";
 }

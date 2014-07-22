@@ -241,6 +241,26 @@ void gTaskHelper::deleteTaskByTaskListTitle(QString listTitle, QString taskId)
     connect(this, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(processdeleteTaskByTaskListTitle(QString)) );
 }
 
+void gTaskHelper::clearTaskListById(QString listId)
+{
+    if(!checkAccessToken())
+        return ;
+    QNetworkAccessManager *nwam =  qnam;
+    QNetworkRequest *request = new QNetworkRequest(QUrl(tasksAPIUrl + "lists/" + listId + "/clear"));
+    request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QString at = "Bearer " + accessToken;
+    request->setRawHeader("Authorization", QByteArray(at.toAscii()));
+    QByteArray ba;
+    nwam->post(*request,ba);
+    connect(nwam, SIGNAL(finished(QNetworkReply*)) , this, SLOT(processclearTaskListById(QNetworkReply*)) );
+}
+
+void gTaskHelper::clearTaskListByTitle(QString listTitle)
+{
+    getTaskListId(listTitle);
+    connect(this, SIGNAL(taskListIdRetrieved(QString)) , this, SLOT(clearTaskListById(QString)) );
+}
+
 void gTaskHelper::processTasksOfListReply(QNetworkReply *r)
 {
     QByteArray ba = r->readAll(); // may cause partial answer
@@ -324,6 +344,17 @@ void gTaskHelper::processdeleteTaskByTaskListId(QNetworkReply *r)
 void gTaskHelper::processdeleteTaskByTaskListTitle(QString listId)
 {
     deleteTaskByTaskListId(listId, currentTaskId);
+}
+
+void gTaskHelper::processclearTaskListById(QNetworkReply *r)
+{
+    QByteArray ba = r->readAll();
+    if(ba.size() == 0)
+        emit taskListCleared();
+    else
+        emit taskListNotCleared();
+    r->deleteLater();
+    disconnect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(processclearTaskListById(QNetworkReply*)) );
 }
 
 void gTaskHelper::processinsertTaskListReply(QNetworkReply *r)

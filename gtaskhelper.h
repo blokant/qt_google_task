@@ -37,6 +37,8 @@ signals:
     void taskUpdated(gTask*);
     void taskDeleted();
     void taskNotDeleted();
+    void taskListCleared();
+    void taskListNotCleared();
 
 public slots:
     bool checkAccessToken();
@@ -65,6 +67,8 @@ public slots:
     void updateTaskByTaskListTitle(QString listTitle, gTask* gt);
     void deleteTaskByTaskListId(QString listId, QString taskId);
     void deleteTaskByTaskListTitle(QString listTitle, QString taskId);
+    void clearTaskListById(QString listId);
+    void clearTaskListByTitle(QString listTitle);
     void processTasksOfListReply(QNetworkReply*);
     void processgetTaskReply(QNetworkReply*);
     void processinsertTaskReply(QNetworkReply*);
@@ -73,6 +77,7 @@ public slots:
     void processupdateTaskByTaskListTitle(QString taskListId);
     void processdeleteTaskByTaskListId(QNetworkReply* r);
     void processdeleteTaskByTaskListTitle(QString listId);
+    void processclearTaskListById(QNetworkReply *r);
 private slots:
     gTaskList* getTaskListFromByteArray(QByteArray *ba);
     gTaskList* getTaskListFromMap(QVariantMap *m);
