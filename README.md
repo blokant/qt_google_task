@@ -2,7 +2,7 @@ qt_google_task
 ==============
 
 Couple of classes to work with google task API from Qt.
-I will reformat it as separate library later and may be i will be able to build gui app on top of it.
+I will reformat it as separate library later and may be i will be able to build gui app on top of that.
 ## General Requirements
   You need libqjson (if i will get addidional free time i will port it to qt5, where json support embedded)
 
